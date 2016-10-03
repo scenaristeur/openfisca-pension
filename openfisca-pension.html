@@ -1,0 +1,34 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`openfisca-pension`
+Permet le calcul des prestations sociales, impôts, avantages... perçus et dûs par chacun des deux époux après une séparation ou un divorce.  Basé sur OpenFisca Web Api
+
+@demo demo/index.html 
+-->
+
+<dom-module id="openfisca-pension">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]</h2>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'openfisca-pension',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'openfisca-pension',
+        },
+      },
+
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,87 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../app-storage/app-localstorage/app-localstorage-document.html">
+
+<!--
+`openfisca-resultat`
+
+
+@demo demo/index.html 
+-->
+
+<dom-module id="openfisca-resultat">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+			<!-- LOCAL STORAGE -->
+				<app-localstorage-document key="resultat" data="{{resultat}}">
+		</app-localstorage-document>
+		
+    <h2>Couple</h2>
+	Revenu disponible 2015 : 
+	Niveau de vie net 2015 : 
+	<table>
+		<tr><th></th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
+			<tr>
+			<td>Revenu Disponible 2015</td>
+			<td>{{revDispCpl}}</td>
+			<td>{{revDispMr}}</td>
+			<td>{{revDispMme}}</td>
+			</tr>	
+			<tr>
+			<td>Niveau de vie net 2015</td>
+			<td>{{nivvieCpl}}</td>
+			<td>{{nivvieMr}}</td>
+			<td>{{nivvieMme}}</td>
+			</tr>
+	</table>
+	
+	
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'openfisca-resultat',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'openfisca-resultat',
+        },
+		revDispCpl:{
+			type : String
+			},
+		revDispMr:{
+			type : String
+			},
+		revDispMme:{
+			type : String
+			},
+		nivvieCpl:{
+			type: String
+			},
+		nivvieMr:{
+			type : String
+			},
+		nivvieMme:{
+			type : String
+			},
+		resultat:{
+			type: Array,
+			notify: true,
+				observer: '_resultatChanged'
+			}
+      },
+	  				_resultatChanged:function(resultat){
+					console.log(resultat);
+					console.log(resultat[0].menages[0].revdisp);
+					this.revDispCpl=resultat[0].menages[0].resdisp[2015];
+					
+				},
+
+    });
+  </script>
+</dom-module>

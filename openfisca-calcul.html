@@ -1,0 +1,414 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+
+<!--
+	`openfisca-calcul`
+	
+	
+	@demo demo/index.html 
+-->
+
+<dom-module id="openfisca-calcul">
+	<template>
+		<style is="custom-style">
+			
+			:host {
+			display: block;
+			}
+			paper-dialog.colored {
+			border: 2px solid;
+			border-color: var(--paper-red-500);
+			background-color: var(--paper-light-red-50);
+			color: var(--paper-red-500);
+			}
+		</style>
+		
+		<!-- LOCAL STORAGE -->
+		<app-localstorage-document key="data2send" data="{{data2send}}">
+		</app-localstorage-document>
+		<app-localstorage-document key="resultat" data="{{resultat}}">
+		</app-localstorage-document>
+		<app-localstorage-document key="modeGarde" data="{{modeGarde}}">
+		</app-localstorage-document>
+		
+		<iron-ajax
+		id="ajaxcalculate"
+		url="https://api.openfisca.fr/api/1/calculate"
+		body="{{data2send}}"
+		method="POST"
+		handle-as="json"
+		content-type="application/json"
+		on-response="handleResponse"
+		on-error="_handleErrorResponse">
+		</iron-ajax>  
+		
+
+		
+		
+		<paper-button id="calculButton" raised on-tap="calcul" value="CALCUL">CALCUL <paper-spinner id="spinner" alt="Calcul en cours"> </paper-button>
+			
+			<h2>Résultat {{periode}}</h2>
+			
+			<table border=2>
+				<tr><th></th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
+				<tr>
+					<td>UC ADULTES (1er ad =1, ad suivant=0.5)</td>
+					<td>{{UCACpl}}</td>
+					<td>{{UCAMr}}</td>
+					<td>{{UCAMme}}</td>
+				</tr>
+				<tr>
+					<td>UC ENFANTS (0.3/enfant) (traiter + de 14) coeff1.4 & 0.4</td>
+					<td>{{UCECpl}}</td>
+					<td>{{UCEMr}}</td>
+					<td>{{UCEMme}}</td>
+				</tr>
+				<tr>
+					<td>UC Total</td>
+					<td>{{UCTCpl}}</td>
+					<td>{{UCTMr}}</td>
+					<td>{{UCTMme}}</td>
+				</tr>
+				<tr>
+					<td>Salaires imposables (salaire_imposable)</td>
+					<td>{{sImpCpl}}</td>
+					<td>{{sImpMr}}</td>
+					<td>{{sImpMme}}</td>
+				</tr>
+				<tr>
+					<td>Prestations familiales (pfam)</td>
+					<td>{{pfamCpl}}</td>
+					<td>{{pfamMr}}</td>
+					<td>{{pfamMme}}</td>
+				</tr>
+				
+				<tr>
+					<td>Allocations Logement (aides_logement)	</td>
+					<td>{{ALCpl}}</td>
+					<td>{{ALMr}}</td>
+					<td>{{ALMme}}</td>
+				</tr>
+				<tr>
+					<td>IR & PPE (irpp)</td>
+					<td>{{irppCpl}}</td>
+					<td>{{irppMr}}</td>
+					<td>{{irppMme}}</td>
+				</tr>
+				<tr>
+					<td>CSG & CRDS (?)</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				
+				<tr>
+					<td>Revenu Disponible</td>
+					<td>{{revDispCpl}}</td>
+					<td>{{revDispMr}}</td>
+					<td>{{revDispMme}}</td>
+				</tr>
+				<tr>
+					<td>Coût estimé des enfants (calcul / donnees OpenFisca )</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Prise en charge publique du coût des enfants (?)</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<td>Cout Privé des enfants (?)</td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>Niveau de vie net</td>
+				<td>{{nivvieCpl}}</td>
+				<td>{{nivvieMr}}</td>
+				<td>{{nivvieMme}}</td>
+			</tr>
+			<td>Evolution du niveau de vie</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<td>Cout net des enfants en % du niveau de vie avant séparation</td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<td>Loyer annuel estimé</td>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>Minima sociaux (mini)/mois vérifier</td>
+	<td>{{miniCpl}}</td>
+	<td>{{miniMr}}</td>
+	<td>{{miniMme}}</td>
+</tr>
+<tr>
+	<td>Pension Alimentaire calculée (Barème ministère de la justice) (mois/an)</td>
+	<td></td>
+	<td>mois : {{paMrm}}</br>an : {{paMra}}</td>
+	<td>mois : {{paMmem}}</br>an : {{paMmea}}</td>
+</tr>
+</table>
+
+
+		<paper-dialog 
+		id="alerte"
+		class="colored"
+		
+		entry-animation="scale-up-animation"
+		exit-animation="fade-out-animation">
+			<h2>Erreur</h2>
+			<p>Une erreur s'est produite,</br> consulter la console, </br>ou contactez les developpeurs</p>
+		</paper-dialog>
+</template>
+
+<script>
+	Polymer({
+		
+		is: 'openfisca-calcul',
+		
+		properties: {
+			prop1: {
+				type: String,
+				value: 'openfisca-calcul',
+			},	
+			periode:{
+				type : String
+			},
+			data2send : {
+				type : Object,
+				notify : true,
+				observer: '_dataChanged'
+			},
+			resultat : {
+				type : Array,
+				notify : true
+			},
+			revDispCpl:{
+				type : String
+			},
+			revDispMr:{
+				type : String
+			},
+			revDispMme:{
+				type : String
+			},
+			nivvieCpl:{
+				type: String
+			},
+			nivvieMr:{
+				type : String
+			},
+			nivvieMme:{
+				type : String
+			},
+			resultat:{
+				type: Array,
+				notify: true,
+			//	observer: '_resultatChanged'
+			},
+			UCACpl:{type : String},
+			UCAMr:{type : String},
+			UCAMme:{type : String},
+			UCECpl:{type : String},
+			UCEMr:{type : String},
+			UCEMme:{type : String},
+			UCTCpl:{type : String},
+			UCTMr:{type : String},
+			UCTMme:{type : String},
+			pfamCpl:{type : String},
+			pfamMr:{type : String},
+			pfamMme:{type : String},
+			irppCpl:{type : String},
+			irppMr:{type : String},
+			irppMme:{type : String},
+			sImpCpl:{type : String},
+			sImpMr:{type : String},
+			sImpMme:{type : String},
+			ALCpl:{type : String},
+			ALMr:{type : String},
+			ALMme:{type : String},
+			miniCpl:{type : String},
+			miniMr:{type : String},
+			miniMme:{type : String},
+			paMrm:{type : String},
+			paMmem:{type : String},
+			paMra:{type : String},
+			paMmea:{type : String},
+			modeGarde:{type : String},
+		},
+		_handleErrorResponse: function (event) {
+			console.log(event);
+			console.log(event.detail);
+			console.log(event.detail.error);
+			console.log(event.detail.error.message);
+			console.log(event.detail.request);
+			console.log(event.detail.response);
+			console.log(event.detail.request.response);
+			this.$.alerte.positionTarget = this.$.calculButton;
+			this.$.alerte.open();
+			this.$.spinner.active=false;
+		},
+		/**
+			* recupere et parse la reponse du serveur
+			*/
+			handleResponse: function(data,error){
+				this.$.spinner.active=false;
+				var result=data.detail.response.value;
+				console.log("RESULTATS");
+				console.log(result);			
+				this.resultat=result;
+				this.periode=this.data2send.scenarios[0].period;
+				var periode=this.periode;
+				console.log(this.periode);
+				if (error){
+					console.log(error);
+				}
+				
+				for (var key in result) {
+					if (result.hasOwnProperty(key)) {
+						var valeur=result[key];
+						console.log(key+" :");
+						console.log(valeur);
+					}
+				}		
+				
+				// entrer ensuite dans result pour avoir les details : 
+				//	console.log(result[0].menages[0].revdisp[2015]);
+				/*for (var i in result){
+					var resultat = result[i];
+					console.log("Revenu disponible 2015 : "+Math.round(resultat.menages[0].revdisp[2015]));
+					var floatRD2015 = resultat.menages[0].revdisp[2015];
+					var rd2015 = Math.round(floatRD2015);
+					console.log(rd2015);
+					console.log("Niveau de vie net 2015 : "+resultat.menages[0].nivvie_net[2015]);
+				}*/
+				this.revDispCpl=Math.round(result[0].menages[0].revdisp[periode]);
+				this.revDispMr=Math.round(result[1].menages[0].revdisp[periode]);
+				this.revDispMme=Math.round(result[2].menages[0].revdisp[periode]);
+				this.nivvieCpl=Math.round(result[0].menages[0].nivvie_net[periode]);
+				this.nivvieMr=Math.round(result[1].menages[0].nivvie_net[periode]);
+				this.nivvieMme=Math.round(result[2].menages[0].nivvie_net[periode]);
+				
+				this.pfamCpl=Math.round(result[0].familles[0].pfam[periode]);
+				this.pfamMr=Math.round(result[1].familles[0].pfam[periode]);
+				this.pfamMme=Math.round(result[2].familles[0].pfam[periode]);
+				
+				this.miniCpl=Math.round(result[0].familles[0].mini[periode]);
+				this.miniMr=Math.round(result[1].familles[0].mini[periode]);
+				this.miniMme=Math.round(result[2].familles[0].mini[periode]);
+				
+				this.ALCpl=Math.round(result[0].familles[0].aides_logement[periode]);
+				this.ALMr=Math.round(result[1].familles[0].aides_logement[periode]);
+				this.ALMme=Math.round(result[2].familles[0].aides_logement[periode]);
+				
+				this.irppCpl=Math.round(result[0].foyers_fiscaux[0].irpp[periode]);
+				this.irppMr=Math.round(result[1].foyers_fiscaux[0].irpp[periode]);
+				this.irppMme=Math.round(result[2].foyers_fiscaux[0].irpp[periode]);
+				
+				this.calculUC(result);
+				this.calculPa(result);
+				
+			},
+			calculPa(result){
+				var salaireImposableMr=result[1].individus[0].salaire_imposable[this.periode];
+				var salaireImposableMrMensuel=salaireImposableMr/12;
+				var salMonMoinsMini=salaireImposableMrMensuel-this.miniMr;
+				var nbEnfants=result[2].familles[0].enfants.length;
+				
+				var PAReduit=[18,15.5,13.3,11.7,10.6,9.5];
+				var PAClassique=[13.5,11.5,10,8.8,8,7.2];
+				var PAAlternee=[9,7.8,6.7,5.9,5.3,4.8];
+				console.log("modegarde "+this.modeGarde);
+				var taux=[];
+				switch(this.modeGarde) {
+					case 0:
+					taux=PAReduit;
+					break;
+					case 1:
+					taux=PAClassique;
+					break;
+					case 2:
+					taux=PAAlternee;
+					break;
+					default:
+					console.log("pb sur mode de garde");
+				}
+				
+				console.log(salMonMoinsMini+" "+nbEnfants);
+				console.log(taux);
+				var tx=taux[nbEnfants-1];
+				console.log(tx);
+				var paParEnf=salMonMoinsMini*tx/100;
+				var paTot=paParEnf*nbEnfants;
+				this.paMrm=-Math.round(paTot);
+				this.paMmem=Math.round(paTot);
+				this.paMra=this.paMrm*12;
+				this.paMmea=this.paMmem*12;
+				
+			},
+			calculUC:function(result){
+				var declarantsCpl=result[0].foyers_fiscaux[0].declarants;
+				var declarantsMr=result[1].foyers_fiscaux[0].declarants;
+				var declarantsMme=result[2].foyers_fiscaux[0].declarants;
+				var pacCpl=result[0].foyers_fiscaux[0].personnes_a_charge;
+				var pacMr=result[1].foyers_fiscaux[0].personnes_a_charge;
+				var pacMme=result[2].foyers_fiscaux[0].personnes_a_charge;
+				console.log(declarantsCpl);
+				if (declarantsCpl.length==1){
+					this.UCACpl=1;
+					}else{
+					this.UCACpl=1+(declarantsCpl.length-1)*.5;
+				}
+				if (declarantsMr.length==1){
+					this.UCAMr=1;
+					}else{
+					this.UCAMr=1+(declarantsMr.length-1)*.5;
+				}
+				if (declarantsMme.length==1){
+					this.UCAMme=1;
+					}else{
+					this.UCAMme=1+(declarantsMme.length-1)*.5;
+				}
+				
+				/*
+					this.UCECpl
+					this.UCEMr
+					this.UCEMme
+					this.UCTCpl
+					this.UCTMr
+				this.UCTMme*/
+			},
+			calcul:function(){
+				//LANCEMENT DE LA REQUETE
+				console.log(this.data2send);
+				//suppression temporaire des scenarios Mr et Mme pour tests tant qu'il ne sont pas prets
+				//this.splice('data2send',1,2);
+				var dataTemp=this.data2send;
+				this.data2send={};
+				this.data2send=dataTemp;
+				//console.log(this.data2send);
+				this.$.spinner.active=true;
+				this.resultat=[];
+				this.$.ajaxcalculate.generateRequest();	
+			},
+			_dataChanged:function(data){
+				console.log(this.data2send);
+			},
+			
+		});
+	</script>
+</dom-module>

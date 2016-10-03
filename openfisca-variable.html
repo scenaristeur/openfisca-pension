@@ -1,0 +1,126 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../app-storage/app-localstorage/app-localstorage-document.html">
+
+<!--
+	`openfisca-variable`
+	
+	
+	@demo demo/index.html 
+-->
+
+<dom-module id="openfisca-variable">
+	<template>
+		<style>
+			:host {
+			display: block;
+			}
+		</style>
+		<app-localstorage-document key="data2send" data="{{data2send}}">
+		</app-localstorage-document>
+				<app-localstorage-document key="modeGarde" data="{{modeGarde}}">
+		</app-localstorage-document>
+		
+		Commençons par définir la période d'étude : </br>
+		<paper-dropdown-menu label="Periode" horizontal-align="left">
+			<paper-listbox 
+			class="dropdown-content" 
+			selected="{{periodeId}}"
+			attr-for-selected="myid">
+				<template is="dom-repeat" items="{{periodes}}" as="periode" index-as="periodeId">
+					<paper-item myid="[[periodeId]]">[[periode]]</paper-item>
+				</template>
+			</paper-listbox>
+		</paper-dropdown-menu>
+		</br>et le mode de garde : </br>
+		<paper-dropdown-menu label="Mode de garde" horizontal-align="left">
+			<paper-listbox 
+			class="dropdown-content" 
+			selected="{{gardeId}}"
+			attr-for-selected="myid">
+				<template is="dom-repeat" items="{{gardes}}" as="garde" index-as="gardeId">
+					<paper-item myid="[[gardeId]]">[[garde]]</paper-item>
+				</template>
+			</paper-listbox>
+		</paper-dropdown-menu>
+		</br>
+		(+ choix des variables de sortie)
+	</template>
+	
+	<script>
+		Polymer({
+			
+			is: 'openfisca-variable',
+			
+			properties: {
+				data2send : {
+					type : Object,
+					notify : true,
+					//observer: '_dataChanged'
+				},
+				periodes :{
+					type : Array,
+					value : ["2016","2015","2014","2013","2012","2011","2010"]      
+				},
+				periode : {
+					computed : 'computePeriode(periodeId)',
+					type : String,
+					notify : true,
+					observer: '_periodChanged'
+				},
+				periodeId : {
+					notify : true  ,
+					value: 0    
+				} ,
+				modeGarde : {
+					notify : true  
+				} ,
+				gardes :{
+					type : Array,
+					value : ["Réduit","Classique","Garde Alternée"]      
+				},
+				garde : {
+					computed : 'computeGarde(gardeId)',
+					type : String,
+					notify : true,
+					observer: '_gardeChanged'
+				},
+				gardeId : {
+					notify : true  ,
+					value: 0    
+				} ,
+			},
+		  	computePeriode : function(id){
+				//	var per=this.periodes[this.periode];
+				console.log("updatePer"+id);
+				return id;
+			}  , 
+			computeGarde : function(id){
+				console.log("updateGarde"+id);
+				return id;
+			}  , 
+			_gardeChanged: function(newGarde,oldGarde){
+				this.modeGarde=newGarde;
+				},
+			_periodChanged: function(newPeriod,oldPeriod){
+				//console.log(this.data2send);
+				if(this.data2send){
+					var scenarios=this.data2send.scenarios;
+					var per=this.periodes[newPeriod];
+				//console.log(per);
+					for (var i=0; i<scenarios.length;i++ ){
+						var scenario=scenarios[i];
+						scenario.period=per;
+					}
+					//console.log(this.data2send);
+					//update manuelle
+					var dataTemp=this.data2send;
+					this.data2send={};
+					this.data2send=dataTemp;
+				}
+			}
+	});
+</script>
+</dom-module>
