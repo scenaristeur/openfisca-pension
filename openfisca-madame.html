@@ -39,9 +39,9 @@
 			<td style="width:100%">
 				<paper-dropdown-menu style="width:100%" horizontal-align="left" label="Statut dans le scenario 'Madame'">
 					<paper-listbox 
-					id="statutMme,[[item.id]]"
+					id="statutMme"
 					class="dropdown-content" 
-					selected="mme,[[item.id]],[[statutId]]"
+					selected="{{statutId}}"
 					attr-for-selected="myid">
 						<template is="dom-repeat" items="{{statuts}}" as="statut" index-as="statutId">
 							<paper-item myid="mme,[[item.id]],[[statutId]]">[[statut]]</paper-item>

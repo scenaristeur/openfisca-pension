@@ -30,30 +30,36 @@
 		</app-localstorage-document>
 		
 		<table border=1>
-		<template is="dom-repeat" items="{{individus}}">
+		<template is="dom-repeat" items="{{individus}}" as="individu" index-as="individuId">
 		<tr>
 			<td>
-				<paper-item  individu={{item}}>{{item.id}}
+				<paper-item  >{{individu.id}}
 			</td>
+			
+						
 			<td style="width:100%">
-				<paper-dropdown-menu style="width:100%" horizontal-align="left" label="Statut dans le scenario 'Couple'">
+				<!--on-paper-dropdown-close="fromAccountChanged"-->
+				<paper-dropdown-menu  id="cpl{{individu.id}}" style="width:100%" horizontal-align="left" label="Statut dans le scenario 'Couple'" >
 					<paper-listbox 
-					id="statutCpl,[[item.id]]"
+					id="cplLB{{individu.id}}"
 					class="dropdown-content" 
-					selected="cpl,[[item.id]],[[statutId]]"
+					selected="{{statutId}}"
 					attr-for-selected="myid">
 						<template is="dom-repeat" items="{{statuts}}" as="statut" index-as="statutId">
-							<paper-item myid="cpl,[[item.id]],[[statutId]]">[[statut]]</paper-item></hr>
+							<paper-item myid="cpl,[[individu.id]],[[statutId]]" >[[statut]]</paper-item></hr>
 						</template>
 						
 					</paper-listbox>
 				</paper-dropdown-menu>
 			</td>
+			
+			
 			</paper-item>
 		</tr>
 			
 		</template>
 		</table>
+		
 		
 		<h2>Occupation du logement</h2>
 		
@@ -79,6 +85,11 @@
 			is: 'openfisca-couple',
 			
 			properties: {
+				suggestions :{
+					type : Array,
+					value :  [{"id": "one", "name": "name_one"}, {"id": "two", "name": "name_two"}]
+
+				},
 				data2send : {
 					type : Object,
 					notify : true,
@@ -117,9 +128,15 @@
 			
 			//FONCTIONS
 			
-			
+			fromAccountChanged: function(event) {
+console.log(this.$.cplDavid);
+console.log(this.$.cplLBDavid);
+   console.log(event.model.item);
+  console.log(event.target);
+},
 			computeStatut : function(id){
 				console.log(id);
+				console.log(id.parent);
 				this.updateScenarios(id);
 				return id;
 			},
@@ -163,6 +180,10 @@
 				console.log(id);
 				this.updateLogement(id);
 				return id;
+			},	
+			selection : function(data){
+				console.log(data);
+			
 			},			
 			
 			updateScenarios : function(id){
@@ -206,6 +227,17 @@
 				
 				//recuperation du testcase
 				var testcase=scenario.test_case;			
+				
+				
+				//nettoyage dans testcase.INDIVIDUS TOUT LOBJET (evite les doublons)
+					var listToDelete = [individu];
+					for (var i = testcase.individus.length - 1; i >= 0; i--) {
+						var obj = testcase.individus[i];
+						
+						if (listToDelete.indexOf(obj.id) !== -1) {
+							testcase.individus.splice(i, 1);
+						}
+					}	
 				
 				
 				switch(updateparams[2]) {
@@ -278,15 +310,7 @@
 					break;
 					case "3":
 					statut = "pas dans ce scenar";
-					//TODO SUPPRIMER PROPREMENT DANS testcase.INDIVIDUS TOUT LOBJET, PAS SEULEMENT L'ID  
-					var listToDelete = [individu];
-					for (var i = testcase.individus.length - 1; i >= 0; i--) {
-						var obj = testcase.individus[i];
-						
-						if (listToDelete.indexOf(obj.id) !== -1) {
-							testcase.individus.splice(i, 1);
-						}
-					}					
+				
 					
 					
 					/*for (var i=0; i <testcase.individus.length;i++){
@@ -334,10 +358,33 @@
 				
 				
 				console.log(this.data2send);
-				
-				
-				
+
 			},		
+			/*
+			addToIndiv : function(individus,individu){
+				console.log(individus);
+				console.log(individu);
+
+				var trouve=false;
+				var id=individu.id;
+				for (var i=individus.length-1;i>-1;i--){
+					console.log(i);
+					var ind=individus[i];
+					if(id==ind.id){
+						trouve=true;
+					//individus.splice(i, 1);
+						console.log("supprime "+ i); 
+					}else{
+						console.log("garde "+i);
+					}
+					
+				}
+				
+				this.addItem(individus,individu);
+				console.log("ajout");
+				console.log(individus);
+				
+			},*/
 			addItem : function(array,item){
 				if (array.indexOf(item) == -1){
 					console.log("pas trouvé ");
