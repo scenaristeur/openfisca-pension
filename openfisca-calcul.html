@@ -150,10 +150,10 @@
 	<td></td>
 </tr>
 <tr>
-	<td>Minima sociaux (mini)/mois vérifier</td>
-	<td>{{miniCpl}}</td>
-	<td>{{miniMr}}</td>
-	<td>{{miniMme}}</td>
+	<td>Minima sociaux (rsa)/mois vérifier</td>
+	<td>{{rsaCpl}}</td>
+	<td>{{rsaMr}}</td>
+	<td>{{rsaMme}}</td>
 </tr>
 <tr>
 	<td>Pension Alimentaire calculée (Barème ministère de la justice) (mois/an)</td>
@@ -241,9 +241,9 @@
 			ALCpl:{type : String},
 			ALMr:{type : String},
 			ALMme:{type : String},
-			miniCpl:{type : String},
-			miniMr:{type : String},
-			miniMme:{type : String},
+			rsaCpl:{type : String},
+			rsaMr:{type : String},
+			rsaMme:{type : String},
 			paMrm:{type : String},
 			paMmem:{type : String},
 			paMra:{type : String},
@@ -307,9 +307,9 @@
 				this.pfamMr=Math.round(result[1].familles[0].pfam[periode]);
 				this.pfamMme=Math.round(result[2].familles[0].pfam[periode]);
 				
-				this.miniCpl=Math.round(result[0].familles[0].mini[periode]);
-				this.miniMr=Math.round(result[1].familles[0].mini[periode]);
-				this.miniMme=Math.round(result[2].familles[0].mini[periode]);
+				this.rsaCpl=Math.round(result[0].familles[0].rsa[periode]);
+				this.rsaMr=Math.round(result[1].familles[0].rsa[periode]);
+				this.rsaMme=Math.round(result[2].familles[0].rsa[periode]);
 				
 				this.ALCpl=Math.round(result[0].familles[0].aides_logement[periode]);
 				this.ALMr=Math.round(result[1].familles[0].aides_logement[periode]);
@@ -326,7 +326,7 @@
 			calculPa(result){
 				var salaireImposableMr=result[1].individus[0].salaire_imposable[this.periode];
 				var salaireImposableMrMensuel=salaireImposableMr/12;
-				var salMonMoinsMini=salaireImposableMrMensuel-this.miniMr;
+				var salMonMoinsRsa=salaireImposableMrMensuel-this.rsaMr;
 				var nbEnfants=result[2].familles[0].enfants.length;
 				
 				var PAReduit=[18,15.5,13.3,11.7,10.6,9.5];
@@ -348,11 +348,11 @@
 					console.log("pb sur mode de garde");
 				}
 				
-				console.log(salMonMoinsMini+" "+nbEnfants);
+				console.log(salMonMoinsRsa+" "+nbEnfants);
 				console.log(taux);
 				var tx=taux[nbEnfants-1];
 				console.log(tx);
-				var paParEnf=salMonMoinsMini*tx/100;
+				var paParEnf=salMonMoinsRsa*tx/100;
 				var paTot=paParEnf*nbEnfants;
 				this.paMrm=-Math.round(paTot);
 				this.paMmem=Math.round(paTot);
