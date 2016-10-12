@@ -46,13 +46,127 @@
 		on-error="_handleErrorResponse">
 		</iron-ajax>  
 		
-
+		
 		
 		
 		<paper-button id="calculButton" raised on-tap="calcul" value="CALCUL">CALCUL <paper-spinner id="spinner" alt="Calcul en cours"> </paper-button>
 			
 			<h2>Résultat {{periode}}</h2>
+			Vous pouvez utiliser les "<a href="/bower_components/openfisca-pension/outils/" target="_blank">Outils OpenFisca</a>" pour vérifier les données envoyées au serveur de calcul et retournées par celui-ci.
+			<h3> Pension alimentaire calculée selon <a href="https://www.service-public.fr/particuliers/vosdroits/F991">le barème du Ministère de la Justice</a></h3>
+			(todo:déterminier le parent non gardien)
 			
+			<table border=2>
+				<tr>
+					<td>
+						Ressources mensuelles du parent non-gardien 
+						
+					</td>
+					<td>
+						{{sImpMrMen}} €
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Minimum vital {{periode}} (RSA : {{miniMr}} €)
+					</td>
+					<td>
+						{{miniMr}} €
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Après déduction
+					</td>
+					<td>
+						{{salMonMoinsMini}} €
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Nombre d'enfants : {{nbEnfants}} </br>
+						Mode de garde : {{modeGarde}} </br>
+						{{salMonMoinsMini}} * {{tx}} % = {{paParEnf}} € par enfant
+					</td>
+					<td>
+						<div style="font-color:red">{{paTot}} €</div>
+					</td>
+				</tr>
+				
+			</table>
+			
+			
+			
+			<h3> Incidence de cette pension sur le niveau de vie </h3>
+			
+			<table border=2>
+				<tr><th>Sans Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
+				<tr>
+					<td>Salaire Imposable (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
+					<td>{{simpCpl}}</td>
+					<td>{{simpMr}}</td>
+					<td>{{simpMme}}</td>
+				</tr>
+				<tr>
+					<td>IR & PPE (<a href="https://legislation.openfisca.fr/variables/irpp" target="_blank">irpp</a>) </td>
+					<td>{{irppCpl}}</td>
+					<td>{{irppMr}}</td>
+					<td>{{irppMme}}</td>
+				</tr>
+				<tr>
+					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/psoc" target="_blank">psoc</a>)</td>
+					<td>{{psocCpl}}</td>
+					<td>{{psocMr}}</td>
+					<td>{{psocMme}}</td>
+				</tr>
+				<tr>
+					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revdisp" target="_blank">revdisp</a>)</td>
+					<td>{{revDispCpl}}</td>
+					<td>{{revDispMr}}</td>
+					<td>{{revDispMme}}</td>
+				</tr>
+			</table>
+			
+			<table border=2>
+				<tr><th>Avec Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
+				<tr>
+					<td>Salaire Imposable (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
+					<td>{{simpCpl}}</td>
+					<td>{{simpMr}}</td>
+					<td>{{simpMme}}</td>
+				</tr>
+				<tr>
+					<td>IR & PPE (<a href="https://legislation.openfisca.fr/variables/irpp" target="_blank">irpp</a>) </td>
+					<td>{{irppCpl}}</td>
+					<td>{{irppMr}}</td>
+					<td>{{irppMme}}</td>
+				</tr>
+				<tr>
+					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/psoc" target="_blank">psoc</a>)</td>
+					<td>{{psocCpl}}</td>
+					<td>{{psocMr}}</td>
+					<td>{{psocMme}}</td>
+				</tr>
+				<tr>
+					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revdisp" target="_blank">revdisp</a>)</td>
+					<td>{{revDispCpl}}</td>
+					<td>{{revDispMr}}</td>
+					<td>{{revDispMme}}</td>
+				</tr>
+				<tr>
+					<td>Pension alimentaire ({{paTot}} *12)</td>
+					<td></td>
+					<td>{{paMra}}</td>
+					<td>{{paMmea}}</td>
+				</tr>
+			</table>
+			
+			
+			
+			
+			
+			
+</hr>
 			<table border=2>
 				<tr><th></th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 				<tr>
@@ -74,7 +188,7 @@
 					<td>{{UCTMme}}</td>
 				</tr>
 				<tr>
-					<td>Salaires imposables (salaire_imposable)</td>
+					<td>Salaires imposables (<a href="https://legislation.openfisca.fr/variables/salaire_imposable">salaire_imposable</a>)</td>
 					<td>{{sImpCpl}}</td>
 					<td>{{sImpMr}}</td>
 					<td>{{sImpMme}}</td>
@@ -150,10 +264,10 @@
 	<td></td>
 </tr>
 <tr>
-	<td>Minima sociaux (rsa)/mois vérifier</td>
-	<td>{{rsaCpl}}</td>
-	<td>{{rsaMr}}</td>
-	<td>{{rsaMme}}</td>
+	<td>Minima sociaux (mini)/mois vérifier</td>
+	<td>{{miniCpl}}</td>
+	<td>{{miniMr}}</td>
+	<td>{{miniMme}}</td>
 </tr>
 <tr>
 	<td>Pension Alimentaire calculée (Barème ministère de la justice) (mois/an)</td>
@@ -164,15 +278,15 @@
 </table>
 
 
-		<paper-dialog 
-		id="alerte"
-		class="colored"
-		
-		entry-animation="scale-up-animation"
-		exit-animation="fade-out-animation">
-			<h2>Erreur</h2>
-			<p>Une erreur s'est produite,</br> consulter la console, </br>ou contactez les developpeurs</p>
-		</paper-dialog>
+<paper-dialog 
+id="alerte"
+class="colored"
+
+entry-animation="scale-up-animation"
+exit-animation="fade-out-animation">
+	<h2>Erreur</h2>
+	<p>Une erreur s'est produite,</br> utilisez <a href="/bower_components/openfisca-pension/outils/" target="_blank">le debuggeur</a> </br>ou contactez les developpeurs via twitter : <a href="https://twitter.com/intent/tweet?screen_name=DFaveris" class="twitter-mention-button" data-size="large" data-related="DFaveris">Tweet to @DFaveris</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
+</paper-dialog>
 </template>
 
 <script>
@@ -198,27 +312,27 @@
 				notify : true
 			},
 			revDispCpl:{
-				type : String
+				type : Number
 			},
 			revDispMr:{
-				type : String
+				type : Number
 			},
 			revDispMme:{
-				type : String
+				type : Number
 			},
 			nivvieCpl:{
-				type: String
+				type: Number
 			},
 			nivvieMr:{
-				type : String
+				type : Number
 			},
 			nivvieMme:{
-				type : String
+				type : Number
 			},
 			resultat:{
 				type: Array,
 				notify: true,
-			//	observer: '_resultatChanged'
+				//	observer: '_resultatChanged'
 			},
 			UCACpl:{type : String},
 			UCAMr:{type : String},
@@ -232,24 +346,61 @@
 			pfamCpl:{type : String},
 			pfamMr:{type : String},
 			pfamMme:{type : String},
-			irppCpl:{type : String},
-			irppMr:{type : String},
-			irppMme:{type : String},
+			psocCpl:{type : String},
+			psocMr:{type : String},
+			psocMme:{type : String},
+			irppCpl:{type : Number},
+			irppMr:{type : Number},
+			irppMme:{type : Number},
 			sImpCpl:{type : String},
 			sImpMr:{type : String},
 			sImpMme:{type : String},
 			ALCpl:{type : String},
 			ALMr:{type : String},
 			ALMme:{type : String},
-			rsaCpl:{type : String},
-			rsaMr:{type : String},
-			rsaMme:{type : String},
+			miniCpl:{type : String},
+			miniMr:{type : String},
+			miniMme:{type : String},
 			paMrm:{type : String},
 			paMmem:{type : String},
 			paMra:{type : String},
 			paMmea:{type : String},
 			modeGarde:{type : String},
+			
+			//variables du calcul bareme justice
+			sImpMrMen:{type : Number},
+			salMonMoinsMini:{type : Number},
+			nbEnfants:{type : Number},
+			tx:{type : Number},
+			paParEnf:{type : Number},
+			paTot:{
+				type : Number,
+				observer: '_paTotChanged'
+			},
+			
+			
+			parentNonGardien : { // à recupérer lors du calcul pour le calcul de la pa barème
+				type : Object
+			}
 		},
+		_paTotChanged: function(data){
+				console.log(data);
+				var paAn=data*12;
+				this.data2send.scenarios[1].test_case.foyers_fiscaux[0].f6gu=paAn;
+				this.data2send.scenarios[2].test_case.individus[0].pensions_alimentaires_percues=paAn;
+				this.data2send.scenarios[2].test_case.individus[0].pensions_alimentaires_percues_decl=true;
+				console.log(this.data2send.scenarios[1].test_case.foyers_fiscaux[0]);
+				//pensions_alimentaires_percues
+				//this.irppMme=Math.round(result[2].foyers_fiscaux[0].irpp[periode]);
+				console.log(this.data2send);
+								var dataTemp=this.data2send;
+				this.data2send={};
+				this.data2send=dataTemp;
+				//console.log(this.data2send);
+				this.$.spinner.active=true;
+				this.resultat=[];
+				this.$.ajaxcalculate.generateRequest();	
+			},
 		_handleErrorResponse: function (event) {
 			console.log(event);
 			console.log(event.detail);
@@ -296,20 +447,29 @@
 					console.log(rd2015);
 					console.log("Niveau de vie net 2015 : "+resultat.menages[0].nivvie_net[2015]);
 				}*/
+				this.simpCpl=Math.round(result[0].menages[0].revini[periode]);
+				this.simpMr=Math.round(result[1].menages[0].revini[periode]);
+				this.simpMme=Math.round(result[2].menages[0].revini[periode]);
+				
 				this.revDispCpl=Math.round(result[0].menages[0].revdisp[periode]);
 				this.revDispMr=Math.round(result[1].menages[0].revdisp[periode]);
 				this.revDispMme=Math.round(result[2].menages[0].revdisp[periode]);
+				
 				this.nivvieCpl=Math.round(result[0].menages[0].nivvie_net[periode]);
 				this.nivvieMr=Math.round(result[1].menages[0].nivvie_net[periode]);
 				this.nivvieMme=Math.round(result[2].menages[0].nivvie_net[periode]);
-				
+							
 				this.pfamCpl=Math.round(result[0].familles[0].pfam[periode]);
 				this.pfamMr=Math.round(result[1].familles[0].pfam[periode]);
 				this.pfamMme=Math.round(result[2].familles[0].pfam[periode]);
 				
-				this.rsaCpl=Math.round(result[0].familles[0].rsa[periode]);
-				this.rsaMr=Math.round(result[1].familles[0].rsa[periode]);
-				this.rsaMme=Math.round(result[2].familles[0].rsa[periode]);
+				this.psocCpl=Math.round(result[0].familles[0].psoc[periode]);
+				this.psocMr=Math.round(result[1].familles[0].psoc[periode]);
+				this.psocMme=Math.round(result[2].familles[0].psoc[periode]);
+				
+				this.miniCpl=Math.round(result[0].familles[0].mini[periode]);
+				this.miniMr=Math.round(result[1].familles[0].mini[periode]);
+				this.miniMme=Math.round(result[2].familles[0].mini[periode]);
 				
 				this.ALCpl=Math.round(result[0].familles[0].aides_logement[periode]);
 				this.ALMr=Math.round(result[1].familles[0].aides_logement[periode]);
@@ -324,10 +484,10 @@
 				
 			},
 			calculPa(result){
-				var salaireImposableMr=result[1].individus[0].salaire_imposable[this.periode];
-				var salaireImposableMrMensuel=salaireImposableMr/12;
-				var salMonMoinsRsa=salaireImposableMrMensuel-this.rsaMr;
-				var nbEnfants=result[2].familles[0].enfants.length;
+				this.sImpMr=result[1].individus[0].salaire_imposable[this.periode];
+				this.sImpMrMen=Math.round(this.sImpMr/12);
+				this.salMonMoinsMini=this.sImpMrMen-this.miniMr;
+				this.nbEnfants=result[2].familles[0].enfants.length;
 				
 				var PAReduit=[18,15.5,13.3,11.7,10.6,9.5];
 				var PAClassique=[13.5,11.5,10,8.8,8,7.2];
@@ -348,14 +508,15 @@
 					console.log("pb sur mode de garde");
 				}
 				
-				console.log(salMonMoinsRsa+" "+nbEnfants);
+				console.log(this.salMonMoinsMini+" "+this.nbEnfants);
 				console.log(taux);
-				var tx=taux[nbEnfants-1];
-				console.log(tx);
-				var paParEnf=salMonMoinsRsa*tx/100;
-				var paTot=paParEnf*nbEnfants;
-				this.paMrm=-Math.round(paTot);
-				this.paMmem=Math.round(paTot);
+				this.tx=taux[this.nbEnfants-1];
+				
+				console.log(this.tx);
+				this.paParEnf=Math.round(this.salMonMoinsMini*this.tx/100);
+				this.paTot=this.paParEnf*this.nbEnfants;
+				this.paMrm=-this.paTot;
+				this.paMmem=this.paTot;
 				this.paMra=this.paMrm*12;
 				this.paMmea=this.paMmem*12;
 				
@@ -375,6 +536,7 @@
 				}
 				if (declarantsMr.length==1){
 					this.UCAMr=1;
+					
 					}else{
 					this.UCAMr=1+(declarantsMr.length-1)*.5;
 				}
