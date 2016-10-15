@@ -7,15 +7,15 @@
 
 <!--
 	`openfisca-calcul`
-	
-	
-	@demo demo/index.html 
+
+
+	@demo demo/index.html
 -->
 
 <dom-module id="openfisca-calcul">
 	<template>
 		<style is="custom-style">
-			
+
 			:host {
 			display: block;
 			}
@@ -26,7 +26,7 @@
 			color: var(--paper-red-500);
 			}
 		</style>
-		
+
 		<!-- LOCAL STORAGE -->
 		<app-localstorage-document key="data2send" data="{{data2send}}">
 		</app-localstorage-document>
@@ -34,7 +34,7 @@
 		</app-localstorage-document>
 		<app-localstorage-document key="modeGarde" data="{{modeGarde}}">
 		</app-localstorage-document>
-		
+
 		<iron-ajax
 		id="ajaxcalculate"
 		url="https://api.openfisca.fr/api/1/calculate"
@@ -44,23 +44,34 @@
 		content-type="application/json"
 		on-response="handleResponse"
 		on-error="_handleErrorResponse">
-		</iron-ajax>  
-		
-		
-		
-		
+		</iron-ajax>
+
+		<iron-ajax
+		id="ajaxcalculatePa"
+		url="https://api.openfisca.fr/api/1/calculate"
+		body="{{data2sendPa}}"
+		method="POST"
+		handle-as="json"
+		content-type="application/json"
+		on-response="handleResponsePa"
+		on-error="_handleErrorResponsePa">
+		</iron-ajax>
+
+
+
+
 		<paper-button id="calculButton" raised on-tap="calcul" value="CALCUL">CALCUL <paper-spinner id="spinner" alt="Calcul en cours"> </paper-button>
-			
+
 			<h2>Résultat {{periode}}</h2>
 			Vous pouvez utiliser les "<a href="/bower_components/openfisca-pension/outils/" target="_blank">Outils OpenFisca</a>" pour vérifier les données envoyées au serveur de calcul et retournées par celui-ci.
 			<h3> Pension alimentaire calculée selon <a href="https://www.service-public.fr/particuliers/vosdroits/F991">le barème du Ministère de la Justice</a></h3>
 			(todo:déterminier le parent non gardien)
-			
+
 			<table border=2>
 				<tr>
 					<td>
-						Ressources mensuelles du parent non-gardien 
-						
+						Ressources mensuelles du parent non-gardien
+
 					</td>
 					<td>
 						{{sImpMrMen}} €
@@ -92,13 +103,13 @@
 						<div style="font-color:red">{{paTot}} €</div>
 					</td>
 				</tr>
-				
+
 			</table>
-			
-			
-			
+
+
+
 			<h3> Incidence de cette pension sur le niveau de vie </h3>
-			
+
 			<table border=2>
 				<tr><th>Sans Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 				<tr>
@@ -126,7 +137,9 @@
 					<td>{{revDispMme}}</td>
 				</tr>
 			</table>
-			
+		</hr>
+		</bR>
+		</hr>
 			<table border=2>
 				<tr><th>Avec Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 				<tr>
@@ -136,38 +149,44 @@
 					<td>{{simpMme}}</td>
 				</tr>
 				<tr>
-					<td>IR & PPE (<a href="https://legislation.openfisca.fr/variables/irpp" target="_blank">irpp</a>) </td>
-					<td>{{irppCpl}}</td>
-					<td>{{irppMr}}</td>
-					<td>{{irppMme}}</td>
-				</tr>
-				<tr>
-					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/psoc" target="_blank">psoc</a>)</td>
-					<td>{{psocCpl}}</td>
-					<td>{{psocMr}}</td>
-					<td>{{psocMme}}</td>
-				</tr>
-				<tr>
-					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revdisp" target="_blank">revdisp</a>)</td>
-					<td>{{revDispCpl}}</td>
-					<td>{{revDispMr}}</td>
-					<td>{{revDispMme}}</td>
-				</tr>
-				<tr>
 					<td>Pension alimentaire ({{paTot}} *12)</td>
 					<td></td>
 					<td>{{paMra}}</td>
 					<td>{{paMmea}}</td>
 				</tr>
+				<tr>
+					<td>Salaire Imposable avec pension alimentaire (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
+					<td>{{simpCpl}}</td>
+					<td>{{simpMrPa}}</td>
+					<td>{{simpMmePa}}</td>
+				</tr>
+				<tr>
+					<td>IR & PPE (<a href="https://legislation.openfisca.fr/variables/irpp" target="_blank">irpp</a>) </td>
+					<td>{{irppCpl}}</td>
+					<td>{{irppMrPa}}</td>
+					<td>{{irppMmePa}}</td>
+				</tr>
+				<tr>
+					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/psoc" target="_blank">psoc</a>)</td>
+					<td>{{psocCplPa}}</td>
+					<td>{{psocMrPa}}</td>
+					<td>{{psocMmePa}}</td>
+				</tr>
+				<tr>
+					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revdisp" target="_blank">revdisp</a>)</td>
+					<td>{{revDispCpl}}</td>
+					<td>{{revDispMrPa}}</td>
+					<td>{{revDispMmePa}}</td>
+				</tr>
+
 			</table>
-			
-			
-			
-			
-			
-			
+
 </hr>
-			<table border=2>
+</bR>
+</hr>
+
+Todo --> prendre en compte les UC, différents modes de calcul...
+		<!--	<table border=2>
 				<tr><th></th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 				<tr>
 					<td>UC ADULTES (1er ad =1, ad suivant=0.5)</td>
@@ -199,7 +218,7 @@
 					<td>{{pfamMr}}</td>
 					<td>{{pfamMme}}</td>
 				</tr>
-				
+
 				<tr>
 					<td>Allocations Logement (aides_logement)	</td>
 					<td>{{ALCpl}}</td>
@@ -218,7 +237,7 @@
 					<td></td>
 					<td></td>
 				</tr>
-				
+
 				<tr>
 					<td>Revenu Disponible</td>
 					<td>{{revDispCpl}}</td>
@@ -276,9 +295,9 @@
 	<td>mois : {{paMmem}}</br>an : {{paMmea}}</td>
 </tr>
 </table>
+-->
 
-
-<paper-dialog 
+<paper-dialog
 id="alerte"
 class="colored"
 
@@ -291,14 +310,14 @@ exit-animation="fade-out-animation">
 
 <script>
 	Polymer({
-		
+
 		is: 'openfisca-calcul',
-		
+
 		properties: {
 			prop1: {
 				type: String,
 				value: 'openfisca-calcul',
-			},	
+			},
 			periode:{
 				type : String
 			},
@@ -306,6 +325,11 @@ exit-animation="fade-out-animation">
 				type : Object,
 				notify : true,
 				observer: '_dataChanged'
+			},
+			data2sendPa : {
+				type : Object,
+				notify : true,
+			//	observer: '_dataChanged'
 			},
 			resultat : {
 				type : Array,
@@ -366,7 +390,7 @@ exit-animation="fade-out-animation">
 			paMra:{type : String},
 			paMmea:{type : String},
 			modeGarde:{type : String},
-			
+
 			//variables du calcul bareme justice
 			sImpMrMen:{type : Number},
 			salMonMoinsMini:{type : Number},
@@ -377,8 +401,8 @@ exit-animation="fade-out-animation">
 				type : Number,
 				observer: '_paTotChanged'
 			},
-			
-			
+
+
 			parentNonGardien : { // à recupérer lors du calcul pour le calcul de la pa barème
 				type : Object
 			}
@@ -386,20 +410,21 @@ exit-animation="fade-out-animation">
 		_paTotChanged: function(data){
 				console.log(data);
 				var paAn=data*12;
-				this.data2send.scenarios[1].test_case.foyers_fiscaux[0].f6gu=paAn;
-				this.data2send.scenarios[2].test_case.individus[0].pensions_alimentaires_percues=paAn;
-				this.data2send.scenarios[2].test_case.individus[0].pensions_alimentaires_percues_decl=true;
-				console.log(this.data2send.scenarios[1].test_case.foyers_fiscaux[0]);
+				this.data2sendPa=this.data2send;
+				this.data2sendPa.scenarios[1].test_case.foyers_fiscaux[0].f6gu=paAn;
+				this.data2sendPa.scenarios[2].test_case.individus[0].pensions_alimentaires_percues=paAn;
+				this.data2sendPa.scenarios[2].test_case.individus[0].pensions_alimentaires_percues_decl=true;
+				console.log(this.data2sendPa.scenarios[1].test_case.foyers_fiscaux[0]);
 				//pensions_alimentaires_percues
 				//this.irppMme=Math.round(result[2].foyers_fiscaux[0].irpp[periode]);
-				console.log(this.data2send);
-								var dataTemp=this.data2send;
-				this.data2send={};
-				this.data2send=dataTemp;
+				console.log(this.data2sendPa);
+								var dataTempPa=this.data2sendPa;
+				this.data2sendPa={};
+				this.data2sendPa=dataTempPa;
 				//console.log(this.data2send);
 				this.$.spinner.active=true;
 				this.resultat=[];
-				this.$.ajaxcalculate.generateRequest();	
+				this.$.ajaxcalculatePa.generateRequest();
 			},
 		_handleErrorResponse: function (event) {
 			console.log(event);
@@ -416,11 +441,11 @@ exit-animation="fade-out-animation">
 		/**
 			* recupere et parse la reponse du serveur
 			*/
-			handleResponse: function(data,error){
+			handleResponsePa: function(data,error){
 				this.$.spinner.active=false;
 				var result=data.detail.response.value;
 				console.log("RESULTATS");
-				console.log(result);			
+				console.log(result);
 				this.resultat=result;
 				this.periode=this.data2send.scenarios[0].period;
 				var periode=this.periode;
@@ -428,16 +453,75 @@ exit-animation="fade-out-animation">
 				if (error){
 					console.log(error);
 				}
-				
+
 				for (var key in result) {
 					if (result.hasOwnProperty(key)) {
 						var valeur=result[key];
 						console.log(key+" :");
 						console.log(valeur);
 					}
-				}		
-				
-				// entrer ensuite dans result pour avoir les details : 
+				}
+				this.simpMrPa=Math.round(result[1].menages[0].revini[periode]);
+				this.simpMmePa=Math.round(result[2].menages[0].revini[periode]);
+
+			//	this.revDispCpl=Math.round(result[0].menages[0].revdisp[periode]);
+				this.revDispMrPa=Math.round(result[1].menages[0].revdisp[periode]);
+				this.revDispMmePa=Math.round(result[2].menages[0].revdisp[periode]);
+
+				//this.nivvieCpl=Math.round(result[0].menages[0].nivvie_net[periode]);
+				this.nivvieMrPa=Math.round(result[1].menages[0].nivvie_net[periode]);
+				this.nivvieMmePa=Math.round(result[2].menages[0].nivvie_net[periode]);
+
+				//this.pfamCpl=Math.round(result[0].familles[0].pfam[periode]);
+				this.pfamMrPa=Math.round(result[1].familles[0].pfam[periode]);
+				this.pfamMmePa=Math.round(result[2].familles[0].pfam[periode]);
+
+				//this.psocCpl=Math.round(result[0].familles[0].psoc[periode]);
+				this.psocMrPA=Math.round(result[1].familles[0].psoc[periode]);
+				this.psocMmePa=Math.round(result[2].familles[0].psoc[periode]);
+
+				//this.miniCpl=Math.round(result[0].familles[0].mini[periode]);
+				this.miniMrPa=Math.round(result[1].familles[0].mini[periode]);
+				this.miniMmePa=Math.round(result[2].familles[0].mini[periode]);
+
+			//	this.ALCpl=Math.round(result[0].familles[0].aides_logement[periode]);
+				this.ALMrPa=Math.round(result[1].familles[0].aides_logement[periode]);
+				this.ALMmePa=Math.round(result[2].familles[0].aides_logement[periode]);
+
+				//this.irppCpl=Math.round(result[0].foyers_fiscaux[0].irpp[periode]);
+				this.irppMrPa=Math.round(result[1].foyers_fiscaux[0].irpp[periode]);
+				this.irppMmePa=Math.round(result[2].foyers_fiscaux[0].irpp[periode]);
+
+
+
+
+
+			},
+		/**
+			* recupere et parse la reponse du serveur
+			*/
+			handleResponse: function(data,error){
+				this.$.spinner.active=false;
+				var result=data.detail.response.value;
+				console.log("RESULTATS");
+				console.log(result);
+				this.resultat=result;
+				this.periode=this.data2send.scenarios[0].period;
+				var periode=this.periode;
+				console.log(this.periode);
+				if (error){
+					console.log(error);
+				}
+
+				for (var key in result) {
+					if (result.hasOwnProperty(key)) {
+						var valeur=result[key];
+						console.log(key+" :");
+						console.log(valeur);
+					}
+				}
+
+				// entrer ensuite dans result pour avoir les details :
 				//	console.log(result[0].menages[0].revdisp[2015]);
 				/*for (var i in result){
 					var resultat = result[i];
@@ -450,45 +534,45 @@ exit-animation="fade-out-animation">
 				this.simpCpl=Math.round(result[0].menages[0].revini[periode]);
 				this.simpMr=Math.round(result[1].menages[0].revini[periode]);
 				this.simpMme=Math.round(result[2].menages[0].revini[periode]);
-				
+
 				this.revDispCpl=Math.round(result[0].menages[0].revdisp[periode]);
 				this.revDispMr=Math.round(result[1].menages[0].revdisp[periode]);
 				this.revDispMme=Math.round(result[2].menages[0].revdisp[periode]);
-				
+
 				this.nivvieCpl=Math.round(result[0].menages[0].nivvie_net[periode]);
 				this.nivvieMr=Math.round(result[1].menages[0].nivvie_net[periode]);
 				this.nivvieMme=Math.round(result[2].menages[0].nivvie_net[periode]);
-							
+
 				this.pfamCpl=Math.round(result[0].familles[0].pfam[periode]);
 				this.pfamMr=Math.round(result[1].familles[0].pfam[periode]);
 				this.pfamMme=Math.round(result[2].familles[0].pfam[periode]);
-				
+
 				this.psocCpl=Math.round(result[0].familles[0].psoc[periode]);
 				this.psocMr=Math.round(result[1].familles[0].psoc[periode]);
 				this.psocMme=Math.round(result[2].familles[0].psoc[periode]);
-				
+
 				this.miniCpl=Math.round(result[0].familles[0].mini[periode]);
 				this.miniMr=Math.round(result[1].familles[0].mini[periode]);
 				this.miniMme=Math.round(result[2].familles[0].mini[periode]);
-				
+
 				this.ALCpl=Math.round(result[0].familles[0].aides_logement[periode]);
 				this.ALMr=Math.round(result[1].familles[0].aides_logement[periode]);
 				this.ALMme=Math.round(result[2].familles[0].aides_logement[periode]);
-				
+
 				this.irppCpl=Math.round(result[0].foyers_fiscaux[0].irpp[periode]);
 				this.irppMr=Math.round(result[1].foyers_fiscaux[0].irpp[periode]);
 				this.irppMme=Math.round(result[2].foyers_fiscaux[0].irpp[periode]);
-				
+
 				this.calculUC(result);
 				this.calculPa(result);
-				
+
 			},
 			calculPa(result){
 				this.sImpMr=result[1].individus[0].salaire_imposable[this.periode];
 				this.sImpMrMen=Math.round(this.sImpMr/12);
 				this.salMonMoinsMini=this.sImpMrMen-this.miniMr;
 				this.nbEnfants=result[2].familles[0].enfants.length;
-				
+
 				var PAReduit=[18,15.5,13.3,11.7,10.6,9.5];
 				var PAClassique=[13.5,11.5,10,8.8,8,7.2];
 				var PAAlternee=[9,7.8,6.7,5.9,5.3,4.8];
@@ -507,11 +591,11 @@ exit-animation="fade-out-animation">
 					default:
 					console.log("pb sur mode de garde");
 				}
-				
+
 				console.log(this.salMonMoinsMini+" "+this.nbEnfants);
 				console.log(taux);
 				this.tx=taux[this.nbEnfants-1];
-				
+
 				console.log(this.tx);
 				this.paParEnf=Math.round(this.salMonMoinsMini*this.tx/100);
 				this.paTot=this.paParEnf*this.nbEnfants;
@@ -519,7 +603,7 @@ exit-animation="fade-out-animation">
 				this.paMmem=this.paTot;
 				this.paMra=this.paMrm*12;
 				this.paMmea=this.paMmem*12;
-				
+
 			},
 			calculUC:function(result){
 				var declarantsCpl=result[0].foyers_fiscaux[0].declarants;
@@ -536,7 +620,7 @@ exit-animation="fade-out-animation">
 				}
 				if (declarantsMr.length==1){
 					this.UCAMr=1;
-					
+
 					}else{
 					this.UCAMr=1+(declarantsMr.length-1)*.5;
 				}
@@ -545,7 +629,7 @@ exit-animation="fade-out-animation">
 					}else{
 					this.UCAMme=1+(declarantsMme.length-1)*.5;
 				}
-				
+
 				/*
 					this.UCECpl
 					this.UCEMr
@@ -565,12 +649,12 @@ exit-animation="fade-out-animation">
 				//console.log(this.data2send);
 				this.$.spinner.active=true;
 				this.resultat=[];
-				this.$.ajaxcalculate.generateRequest();	
+				this.$.ajaxcalculate.generateRequest();
 			},
 			_dataChanged:function(data){
 				console.log(this.data2send);
 			},
-			
+
 		});
 	</script>
 </dom-module>
