@@ -7,17 +7,22 @@
   <script type="text/javascript" src="of.js"></script>
 </head>
 <body>
-<h1>Contenu du data à envoyer</h1> 
-<a href="https://twitter.com/intent/tweet?screen_name=DFaveris" class="twitter-mention-button" data-size="large" data-related="DFaveris">Assistance ? Tweet @DFaveris</a>
+  <h1>Visualisation des data envoyés à OpenFisca</h1>
+  <div> Une question ? un soucis ? un développement personnalisé ?</br> contactez
+    <a href="https://twitter.com/intent/tweet?screen_name=DFaveris" class="twitter-mention-button" data-size="large" data-related="DFaveris">Assistance ? Tweet @DFaveris</a>
+</div>
 
-<textarea id="myTextArea" cols=100 rows=50 ></textarea>
+<span>Dans la fenêtre ci-dessous, vous pouvez apercevoir les données envoyées à l'API OpenFisca</span>
 <div>
-	<button onclick="prettyPrint()">Re-indent</button>
-	<button onclick="launchQuery()">Execute requête</button>
+<textarea id="myTextArea" cols=100 rows=40 ></textarea>
+</div>
+<div>
+<span>Le bouton <button onclick="prettyPrint()">Re-indent</button> vous permet de re-indenter (corriger les espaces en début de ligne) les données à envoyer. </span></br>
+<span>Le bouton	<button onclick="launchQuery()">Execute requête</button> vous permet de tester la requete et de voir dans la partie "Résultat" en dessous, le résultat retourné par l'Api Openfisca et éventuellement de corriger les erreurs selon le message affiché.</span></br>
+<span>Le bouton <button onclick="correctionData()">Mettre a jour les Data</button> met à jour les données et vous permet de faire un nouveau calcul.</span></br>
 </div>
 
 <h1>Resultat</h1>
-<a href="https://twitter.com/intent/tweet?screen_name=DFaveris" class="twitter-mention-button" data-size="large" data-related="DFaveris">Assistance ? Tweet @DFaveris</a>
 
 
 <textarea id="resultTextArea" label="Contenu du data à envoyer" cols=100 rows=50 ></textarea>
