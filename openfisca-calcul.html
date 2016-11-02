@@ -97,7 +97,7 @@
 					<td>
 						Nombre d'enfants : {{nbEnfants}} </br>
 						Mode de garde : {{modeGarde}} </br>
-						
+
 					</td>
 					<td>
 					{{salMonMoinsMini}} * {{tx}} % = {{paParEnf}} € par enfant
@@ -193,17 +193,28 @@
 </bR>
 </hr>
 
-Todo --> prendre en compte les UC, différents modes de calcul ...
-		<!--	<table border=2>
+
+Calcul des Unités de Consommation : L’INSEE a adopté, depuis le début des années 2000, l’échelle d’équivalence utilisée par
+l’OCDE. </br>
+			<table border=2>
 				<tr><th></th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 				<tr>
-					<td>UC ADULTES (1er ad =1, ad suivant=0.5)</td>
+					<td>UC ADULTES :
+						- 1er adulte = 1UC,</br>
+						- adulte suivant = 0.5UC
+					</td>
 					<td>{{UCACpl}}</td>
 					<td>{{UCAMr}}</td>
 					<td>{{UCAMme}}</td>
 				</tr>
 				<tr>
-					<td>UC ENFANTS (0.3/enfant) (traiter + de 14) coeff1.4 & 0.4</td>
+					<td>UC ENFANTS : </br>
+						- 0.5 pour un enfant de plus de 14 ans (faut-il appliquer le coeff ? la note ne précise pas)</br>
+						- 0.3 pour un enfant de moins de 14 ans</br>
+						<a href="http://www.strategie.gouv.fr/sites/strategie.gouv.fr/files/atoms/files/04-doc_cout_separations_17juin.pdf" target="_blank">
+							avec coeff 1.4 (parent gardien) & 0.4 (parent non gardien)</a></br>
+							<i>(page 12 du document de travail)</i>
+						</td>
 					<td>{{UCECpl}}</td>
 					<td>{{UCEMr}}</td>
 					<td>{{UCEMme}}</td>
@@ -214,6 +225,8 @@ Todo --> prendre en compte les UC, différents modes de calcul ...
 					<td>{{UCTMr}}</td>
 					<td>{{UCTMme}}</td>
 				</tr>
+</table>
+				<!--
 				<tr>
 					<td>Salaires imposables (<a href="https://legislation.openfisca.fr/variables/salaire_imposable">salaire_imposable</a>)</td>
 					<td>{{sImpCpl}}</td>
@@ -366,15 +379,15 @@ exit-animation="fade-out-animation">
 				notify: true,
 				//	observer: '_resultatChanged'
 			},
-			UCACpl:{type : String},
-			UCAMr:{type : String},
-			UCAMme:{type : String},
-			UCECpl:{type : String},
-			UCEMr:{type : String},
-			UCEMme:{type : String},
-			UCTCpl:{type : String},
-			UCTMr:{type : String},
-			UCTMme:{type : String},
+			UCACpl:{type : Number},
+			UCAMr:{type : Number},
+			UCAMme:{type : Number},
+			UCECpl:{type : Number},
+			UCEMr:{type : Number},
+			UCEMme:{type : Number},
+			UCTCpl:{type : Number},
+			UCTMr:{type : Number},
+			UCTMme:{type : Number},
 			pfamCpl:{type : String},
 			pfamMr:{type : String},
 			pfamMme:{type : String},
@@ -617,9 +630,7 @@ exit-animation="fade-out-animation">
 				var declarantsCpl=result[0].foyers_fiscaux[0].declarants;
 				var declarantsMr=result[1].foyers_fiscaux[0].declarants;
 				var declarantsMme=result[2].foyers_fiscaux[0].declarants;
-				var pacCpl=result[0].foyers_fiscaux[0].personnes_a_charge;
-				var pacMr=result[1].foyers_fiscaux[0].personnes_a_charge;
-				var pacMme=result[2].foyers_fiscaux[0].personnes_a_charge;
+
 				console.log(declarantsCpl);
 				if (declarantsCpl.length==1){
 					this.UCACpl=1;
@@ -628,7 +639,6 @@ exit-animation="fade-out-animation">
 				}
 				if (declarantsMr.length==1){
 					this.UCAMr=1;
-
 					}else{
 					this.UCAMr=1+(declarantsMr.length-1)*.5;
 				}
@@ -638,14 +648,78 @@ exit-animation="fade-out-animation">
 					this.UCAMme=1+(declarantsMme.length-1)*.5;
 				}
 
-				/*
-					this.UCECpl
-					this.UCEMr
-					this.UCEMme
-					this.UCTCpl
-					this.UCTMr
-				this.UCTMme*/
+				// 0.4 et 1.4 coefficients en garde classique
+				console.log(this.modeGarde);
+				var coeffGardien = 1;
+				var coeffNonGardien = 1;
+
+				switch(this.modeGarde) {
+					case 0:
+				// mode garde réduit pas d'indication,  pris en compte ? par défaut coefff =1 pour garde réduit ?
+					break;
+					case 1:
+					 coeffGardien = 1.4;
+					 coeffNonGardien = 0.4;
+					break;
+					case 2:
+					 coeffGardien = 0.7;
+					 coeffNonGardien = 0.7;
+					break;
+					default:
+					console.log("pb sur mode de garde");
+				}
+
+				this.UCECpl=this.calculUcEnfant(0,result,1);
+				this.UCEMr=this.calculUcEnfant(1,result,coeffNonGardien);
+				this.UCEMme=this.calculUcEnfant(2,result,coeffGardien);
+
+
+
+				this.UCTCpl = (parseFloat(this.UCACpl) + parseFloat(this.UCECpl)).toFixed(2);
+				this.UCTMr =  (parseFloat(this.UCAMr) + parseFloat(this.UCEMr)).toFixed(2);
+				this.UCTMme = (parseFloat(this.UCAMme) + parseFloat(this.UCEMme)).toFixed(2);
 			},
+			calculUcEnfant:function(scenar,result,coeff){
+				//Calcul des UC Enfants
+
+		//		var pacScenar=result[scenar].foyers_fiscaux[0].personnes_a_charge;
+		// on prend pour l'instant le scenario 0 (result[0])  car les enfants ne sont pas dans le scenario Mr
+		var pacScenar=result[0].foyers_fiscaux[0].personnes_a_charge;
+				var ucEnf=0
+				//this.UCECpl=0;
+
+				console.log("UC enfants scenar "+scenar);
+				console.log(pacScenar);
+				// pour chaque personne à charge, calculer l'âge
+				for (var p in pacScenar) {
+						//recherche de l'individu pac et de sa date de naissance
+								// on prend pour l'instant le scenario 0 (result[0])  car les enfants ne sont pas dans le scenario Mr
+						var individus = result[0].individus;
+						var idPac= pacScenar[p];
+						console.log("recherche de "+idPac);
+						 console.log(individus);
+						for (var i in individus ){
+							var ind=individus[i];
+							if (ind.id == idPac){
+								console.log(ucEnf);
+								var date_naissance = ind.date_naissance;
+								var birthday = new Date(date_naissance);
+								var age = ((new Date().getTime() - birthday.getTime())/31536000000).toFixed(0);
+
+									if (age>14){
+										ucEnf=ucEnf+0.5*coeff;
+																			console.log(ind.id+" "+ind.date_naissance+" "+age+ "UC 0.5, COEFF "+coeff);
+									}else{
+											ucEnf=ucEnf+0.3*coeff;
+																				console.log(ind.id+" "+ind.date_naissance+" "+age+" UC 0.3 , COEFF "+coeff);
+									}
+							}
+
+						}
+				}
+				return ucEnf.toFixed(2);
+			},
+
 			calcul:function(){
 				//LANCEMENT DE LA REQUETE
 				console.log(this.data2send);
