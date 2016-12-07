@@ -225,6 +225,12 @@ l’OCDE. </br>
 					<td>{{UCTMr}}</td>
 					<td>{{UCTMme}}</td>
 				</tr>
+				<tr>
+					<td>Coût d'entretien estimé des enfants (UCEnfant/UCTotal*RevenuDisp)</td>
+					<td>{{CoutEnfCpl}}</td>
+					<td>{{CoutEnfMr}}</td>
+					<td>{{CoutEnfMme}}</td>
+				</tr>
 </table>
 				<!--
 				<tr>
@@ -325,7 +331,11 @@ class="colored"
 entry-animation="scale-up-animation"
 exit-animation="fade-out-animation">
 	<h2>Erreur</h2>
-	<p>Une erreur s'est produite,</br> utilisez <a href="/bower_components/openfisca-pension/outils/" target="_blank">le debuggeur</a> </br>ou contactez les developpeurs via twitter : <a href="https://twitter.com/intent/tweet?screen_name=DFaveris" class="twitter-mention-button" data-size="large" data-related="DFaveris">Tweet to @DFaveris</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
+	<p>Une erreur s'est produite,</br> utilisez <a href="/bower_components/openfisca-pension/outils/" target="_blank">le debuggeur</a>
+	 </br>ou contactez les developpeurs via twitter :
+	  <a href="https://twitter.com/intent/tweet?screen_name=DFaveris"
+		class="twitter-mention-button" data-size="large" data-related="DFaveris">Tweet to @DFaveris</a>
+		<!--<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>-->
 </paper-dialog>
 </template>
 
@@ -379,6 +389,10 @@ exit-animation="fade-out-animation">
 				notify: true,
 				//	observer: '_resultatChanged'
 			},
+
+			CoutEnfCpl:{type : Number},
+			CoutEnfMr:{type : Number},
+			CoutEnfMme:{type : Number},
 			UCACpl:{type : Number},
 			UCAMr:{type : Number},
 			UCAMme:{type : Number},
@@ -678,6 +692,15 @@ exit-animation="fade-out-animation">
 				this.UCTCpl = (parseFloat(this.UCACpl) + parseFloat(this.UCECpl)).toFixed(2);
 				this.UCTMr =  (parseFloat(this.UCAMr) + parseFloat(this.UCEMr)).toFixed(2);
 				this.UCTMme = (parseFloat(this.UCAMme) + parseFloat(this.UCEMme)).toFixed(2);
+
+				var periode=this.periode;
+				this.revDispMrPa=Math.round(result[1].menages[0].revdisp[periode]);
+				this.revDispMmePa=Math.round(result[2].menages[0].revdisp[periode]);
+
+console.log(this.UCEMr+" "+this.UCTMr+" "+this.revDispMrPa);
+				this.CoutEnfCpl = ((parseFloat(this.UCECpl)/parseFloat(this.UCTCpl))*parseFloat(this.revDispCpl)).toFixed(2);
+				this.CoutEnfMr = ((parseFloat(this.UCEMr)/parseFloat(this.UCTMr))*parseFloat(this.revDispMrPa)).toFixed(2);
+				this.CoutEnfMme = ((parseFloat(this.UCECpl)/parseFloat(this.UCTMme))*parseFloat(this.revDispMmePa)).toFixed(2);
 			},
 			calculUcEnfant:function(scenar,result,coeff){
 				//Calcul des UC Enfants
