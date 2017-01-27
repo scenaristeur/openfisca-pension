@@ -79,10 +79,10 @@
 				</tr>
 				<tr>
 					<td>
-						Minimum vital {{periode}} (RSA : {{miniMr}} €)
+						Minimum vital {{periode}} (RSA : {{minima_sociauxMr}} €)
 					</td>
 					<td>
-						{{miniMr}} €
+						{{minima_sociauxMr}} €
 					</td>
 				</tr>
 				<tr>
@@ -90,7 +90,7 @@
 						Après déduction
 					</td>
 					<td>
-						{{salMonMoinsMini}} €
+						{{salMonMoinsminima_sociaux}} €
 					</td>
 				</tr>
 				<tr>
@@ -100,7 +100,7 @@
 
 					</td>
 					<td>
-					{{salMonMoinsMini}} * {{tx}} % = {{paParEnf}} € par enfant
+					{{salMonMoinsminima_sociaux}} * {{tx}} % = {{paParEnf}} € par enfant
 					</td>
 					</tr>
 					<tr>
@@ -133,16 +133,16 @@
 					<td>{{irppMme}}</td>
 				</tr>
 				<tr>
-					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/psoc" target="_blank">psoc</a>)</td>
-					<td>{{psocCpl}}</td>
-					<td>{{psocMr}}</td>
-					<td>{{psocMme}}</td>
+					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/prestations_sociales" target="_blank">prestations_sociales</a>)</td>
+					<td>{{prestations_socialesCpl}}</td>
+					<td>{{prestations_socialesMr}}</td>
+					<td>{{prestations_socialesMme}}</td>
 				</tr>
 				<tr>
-					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revdisp" target="_blank">revdisp</a>)</td>
-					<td>{{revDispCpl}}</td>
-					<td>{{revDispMr}}</td>
-					<td>{{revDispMme}}</td>
+					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revenu_disponible" target="_blank">revenu_disponible</a>)</td>
+					<td>{{revenu_disponibleCpl}}</td>
+					<td>{{revenu_disponibleMr}}</td>
+					<td>{{revenu_disponibleMme}}</td>
 				</tr>
 			</table>
 		</hr>
@@ -175,16 +175,16 @@
 					<td>{{irppMmePa}}</td>
 				</tr>
 				<tr>
-					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/psoc" target="_blank">psoc</a>)</td>
-					<td>{{psocCplPa}}</td>
-					<td>{{psocMrPa}}</td>
-					<td>{{psocMmePa}}</td>
+					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/prestations_sociales" target="_blank">prestations_sociales</a>)</td>
+					<td>{{prestations_socialesCplPa}}</td>
+					<td>{{prestations_socialesMrPa}}</td>
+					<td>{{prestations_socialesMmePa}}</td>
 				</tr>
 				<tr>
-					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revdisp" target="_blank">revdisp</a>)</td>
-					<td>{{revDispCpl}}</td>
-					<td>{{revDispMrPa}}</td>
-					<td>{{revDispMmePa}}</td>
+					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revenu_disponible" target="_blank">revenu_disponible</a>)</td>
+					<td>{{revenu_disponibleCpl}}</td>
+					<td>{{revenu_disponibleMrPa}}</td>
+					<td>{{revenu_disponibleMmePa}}</td>
 				</tr>
 
 			</table>
@@ -240,10 +240,10 @@ l’OCDE. </br>
 					<td>{{sImpMme}}</td>
 				</tr>
 				<tr>
-					<td>Prestations familiales (pfam)</td>
-					<td>{{pfamCpl}}</td>
-					<td>{{pfamMr}}</td>
-					<td>{{pfamMme}}</td>
+					<td>Prestations familiales (prestations_familiales)</td>
+					<td>{{prestations_familialesCpl}}</td>
+					<td>{{prestations_familialesMr}}</td>
+					<td>{{prestations_familialesMme}}</td>
 				</tr>
 
 				<tr>
@@ -267,9 +267,9 @@ l’OCDE. </br>
 
 				<tr>
 					<td>Revenu Disponible</td>
-					<td>{{revDispCpl}}</td>
-					<td>{{revDispMr}}</td>
-					<td>{{revDispMme}}</td>
+					<td>{{revenu_disponibleCpl}}</td>
+					<td>{{revenu_disponibleMr}}</td>
+					<td>{{revenu_disponibleMme}}</td>
 				</tr>
 				<tr>
 					<td>Coût estimé des enfants (calcul / donnees OpenFisca )</td>
@@ -310,10 +310,10 @@ l’OCDE. </br>
 	<td></td>
 </tr>
 <tr>
-	<td>Minima sociaux (mini)/mois vérifier</td>
-	<td>{{miniCpl}}</td>
-	<td>{{miniMr}}</td>
-	<td>{{miniMme}}</td>
+	<td>Minima sociaux (minima_sociaux)/mois vérifier</td>
+	<td>{{minima_sociauxCpl}}</td>
+	<td>{{minima_sociauxMr}}</td>
+	<td>{{minima_sociauxMme}}</td>
 </tr>
 <tr>
 	<td>Pension Alimentaire calculée (Barème ministère de la justice) (mois/an)</td>
@@ -366,13 +366,13 @@ exit-animation="fade-out-animation">
 				type : Array,
 				notify : true
 			},
-			revDispCpl:{
+			revenu_disponibleCpl:{
 				type : Number
 			},
-			revDispMr:{
+			revenu_disponibleMr:{
 				type : Number
 			},
-			revDispMme:{
+			revenu_disponibleMme:{
 				type : Number
 			},
 			nivvieCpl:{
@@ -402,12 +402,12 @@ exit-animation="fade-out-animation">
 			UCTCpl:{type : Number},
 			UCTMr:{type : Number},
 			UCTMme:{type : Number},
-			pfamCpl:{type : String},
-			pfamMr:{type : String},
-			pfamMme:{type : String},
-			psocCpl:{type : String},
-			psocMr:{type : String},
-			psocMme:{type : String},
+			prestations_familialesCpl:{type : String},
+			prestations_familialesMr:{type : String},
+			prestations_familialesMme:{type : String},
+			prestations_socialesCpl:{type : String},
+			prestations_socialesMr:{type : String},
+			prestations_socialesMme:{type : String},
 			irppCpl:{type : Number},
 			irppMr:{type : Number},
 			irppMme:{type : Number},
@@ -417,9 +417,9 @@ exit-animation="fade-out-animation">
 			ALCpl:{type : String},
 			ALMr:{type : String},
 			ALMme:{type : String},
-			miniCpl:{type : String},
-			miniMr:{type : String},
-			miniMme:{type : String},
+			minima_sociauxCpl:{type : String},
+			minima_sociauxMr:{type : String},
+			minima_sociauxMme:{type : String},
 			paMrm:{type : String},
 			paMmem:{type : String},
 			paMra:{type : String},
@@ -428,7 +428,7 @@ exit-animation="fade-out-animation">
 
 			//variables du calcul bareme justice
 			sImpMrMen:{type : Number},
-			salMonMoinsMini:{type : Number},
+			salMonMoinsminima_sociaux:{type : Number},
 			nbEnfants:{type : Number},
 			tx:{type : Number},
 			paParEnf:{type : Number},
@@ -496,28 +496,28 @@ exit-animation="fade-out-animation">
 						console.log(valeur);
 					}
 				}
-				this.simpMrPa=Math.round(result[1].menages[0].revini[periode]);
-				this.simpMmePa=Math.round(result[2].menages[0].revini[periode]);
+				this.simpMrPa=Math.round(result[1].menages[0].revenu_initial[periode]);
+				this.simpMmePa=Math.round(result[2].menages[0].revenu_initial[periode]);
 
-			//	this.revDispCpl=Math.round(result[0].menages[0].revdisp[periode]);
-				this.revDispMrPa=Math.round(result[1].menages[0].revdisp[periode]);
-				this.revDispMmePa=Math.round(result[2].menages[0].revdisp[periode]);
+			//	this.revenu_disponibleCpl=Math.round(result[0].menages[0].revenu_disponible[periode]);
+				this.revenu_disponibleMrPa=Math.round(result[1].menages[0].revenu_disponible[periode]);
+				this.revenu_disponibleMmePa=Math.round(result[2].menages[0].revenu_disponible[periode]);
 
-				//this.nivvieCpl=Math.round(result[0].menages[0].nivvie_net[periode]);
-				this.nivvieMrPa=Math.round(result[1].menages[0].nivvie_net[periode]);
-				this.nivvieMmePa=Math.round(result[2].menages[0].nivvie_net[periode]);
+				//this.nivvieCpl=Math.round(result[0].menages[0].niveau_de_vie_net[periode]);
+				this.nivvieMrPa=Math.round(result[1].menages[0].niveau_de_vie_net[periode]);
+				this.nivvieMmePa=Math.round(result[2].menages[0].niveau_de_vie_net[periode]);
 
-				//this.pfamCpl=Math.round(result[0].familles[0].pfam[periode]);
-				this.pfamMrPa=Math.round(result[1].familles[0].pfam[periode]);
-				this.pfamMmePa=Math.round(result[2].familles[0].pfam[periode]);
+				//this.prestations_familialesCpl=Math.round(result[0].familles[0].prestations_familiales[periode]);
+				this.prestations_familialesMrPa=Math.round(result[1].familles[0].prestations_familiales[periode]);
+				this.prestations_familialesMmePa=Math.round(result[2].familles[0].prestations_familiales[periode]);
 
-				//this.psocCpl=Math.round(result[0].familles[0].psoc[periode]);
-				this.psocMrPA=Math.round(result[1].familles[0].psoc[periode]);
-				this.psocMmePa=Math.round(result[2].familles[0].psoc[periode]);
+				//this.prestations_socialesCpl=Math.round(result[0].familles[0].prestations_sociales[periode]);
+				this.prestations_socialesMrPA=Math.round(result[1].familles[0].prestations_sociales[periode]);
+				this.prestations_socialesMmePa=Math.round(result[2].familles[0].prestations_sociales[periode]);
 
-				//this.miniCpl=Math.round(result[0].familles[0].mini[periode]);
-				this.miniMrPa=Math.round(result[1].familles[0].mini[periode]);
-				this.miniMmePa=Math.round(result[2].familles[0].mini[periode]);
+				//this.minima_sociauxCpl=Math.round(result[0].familles[0].minima_sociaux[periode]);
+				this.minima_sociauxMrPa=Math.round(result[1].familles[0].minima_sociaux[periode]);
+				this.minima_sociauxMmePa=Math.round(result[2].familles[0].minima_sociaux[periode]);
 
 			//	this.ALCpl=Math.round(result[0].familles[0].aides_logement[periode]);
 				this.ALMrPa=Math.round(result[1].familles[0].aides_logement[periode]);
@@ -557,38 +557,38 @@ exit-animation="fade-out-animation">
 				}
 
 				// entrer ensuite dans result pour avoir les details :
-				//	console.log(result[0].menages[0].revdisp[2015]);
+				//	console.log(result[0].menages[0].revenu_disponible[2015]);
 				/*for (var i in result){
 					var resultat = result[i];
-					console.log("Revenu disponible 2015 : "+Math.round(resultat.menages[0].revdisp[2015]));
-					var floatRD2015 = resultat.menages[0].revdisp[2015];
+					console.log("Revenu disponible 2015 : "+Math.round(resultat.menages[0].revenu_disponible[2015]));
+					var floatRD2015 = resultat.menages[0].revenu_disponible[2015];
 					var rd2015 = Math.round(floatRD2015);
 					console.log(rd2015);
-					console.log("Niveau de vie net 2015 : "+resultat.menages[0].nivvie_net[2015]);
+					console.log("Niveau de vie net 2015 : "+resultat.menages[0].niveau_de_vie_net[2015]);
 				}*/
-				this.simpCpl=Math.round(result[0].menages[0].revini[periode]);
-				this.simpMr=Math.round(result[1].menages[0].revini[periode]);
-				this.simpMme=Math.round(result[2].menages[0].revini[periode]);
+				this.simpCpl=Math.round(result[0].menages[0].revenu_initial[periode]);
+				this.simpMr=Math.round(result[1].menages[0].revenu_initial[periode]);
+				this.simpMme=Math.round(result[2].menages[0].revenu_initial[periode]);
 
-				this.revDispCpl=Math.round(result[0].menages[0].revdisp[periode]);
-				this.revDispMr=Math.round(result[1].menages[0].revdisp[periode]);
-				this.revDispMme=Math.round(result[2].menages[0].revdisp[periode]);
+				this.revenu_disponibleCpl=Math.round(result[0].menages[0].revenu_disponible[periode]);
+				this.revenu_disponibleMr=Math.round(result[1].menages[0].revenu_disponible[periode]);
+				this.revenu_disponibleMme=Math.round(result[2].menages[0].revenu_disponible[periode]);
 
-				this.nivvieCpl=Math.round(result[0].menages[0].nivvie_net[periode]);
-				this.nivvieMr=Math.round(result[1].menages[0].nivvie_net[periode]);
-				this.nivvieMme=Math.round(result[2].menages[0].nivvie_net[periode]);
+				this.nivvieCpl=Math.round(result[0].menages[0].niveau_de_vie_net[periode]);
+				this.nivvieMr=Math.round(result[1].menages[0].niveau_de_vie_net[periode]);
+				this.nivvieMme=Math.round(result[2].menages[0].niveau_de_vie_net[periode]);
 
-				this.pfamCpl=Math.round(result[0].familles[0].pfam[periode]);
-				this.pfamMr=Math.round(result[1].familles[0].pfam[periode]);
-				this.pfamMme=Math.round(result[2].familles[0].pfam[periode]);
+				this.prestations_familialesCpl=Math.round(result[0].familles[0].prestations_familiales[periode]);
+				this.prestations_familialesMr=Math.round(result[1].familles[0].prestations_familiales[periode]);
+				this.prestations_familialesMme=Math.round(result[2].familles[0].prestations_familiales[periode]);
 
-				this.psocCpl=Math.round(result[0].familles[0].psoc[periode]);
-				this.psocMr=Math.round(result[1].familles[0].psoc[periode]);
-				this.psocMme=Math.round(result[2].familles[0].psoc[periode]);
+				this.prestations_socialesCpl=Math.round(result[0].familles[0].prestations_sociales[periode]);
+				this.prestations_socialesMr=Math.round(result[1].familles[0].prestations_sociales[periode]);
+				this.prestations_socialesMme=Math.round(result[2].familles[0].prestations_sociales[periode]);
 
-				this.miniCpl=Math.round(result[0].familles[0].mini[periode]);
-				this.miniMr=Math.round(result[1].familles[0].mini[periode]);
-				this.miniMme=Math.round(result[2].familles[0].mini[periode]);
+				this.minima_sociauxCpl=Math.round(result[0].familles[0].minima_sociaux[periode]);
+				this.minima_sociauxMr=Math.round(result[1].familles[0].minima_sociaux[periode]);
+				this.minima_sociauxMme=Math.round(result[2].familles[0].minima_sociaux[periode]);
 
 				this.ALCpl=Math.round(result[0].familles[0].aides_logement[periode]);
 				this.ALMr=Math.round(result[1].familles[0].aides_logement[periode]);
@@ -605,7 +605,7 @@ exit-animation="fade-out-animation">
 			calculPa(result){
 				this.sImpMr=result[1].individus[0].salaire_imposable[this.periode];
 				this.sImpMrMen=Math.round(this.sImpMr/12);
-				this.salMonMoinsMini=this.sImpMrMen-this.miniMr;
+				this.salMonMoinsminima_sociaux=this.sImpMrMen-this.minima_sociauxMr;
 				this.nbEnfants=result[2].familles[0].enfants.length;
 
 				var PAReduit=[18,15.5,13.3,11.7,10.6,9.5];
@@ -627,12 +627,12 @@ exit-animation="fade-out-animation">
 					console.log("pb sur mode de garde");
 				}
 
-				console.log(this.salMonMoinsMini+" "+this.nbEnfants);
+				console.log(this.salMonMoinsminima_sociaux+" "+this.nbEnfants);
 				console.log(taux);
 				this.tx=taux[this.nbEnfants-1];
 
 				console.log(this.tx);
-				this.paParEnf=Math.round(this.salMonMoinsMini*this.tx/100);
+				this.paParEnf=Math.round(this.salMonMoinsminima_sociaux*this.tx/100);
 				this.paTot=this.paParEnf*this.nbEnfants;
 				this.paMrm=-this.paTot;
 				this.paMmem=this.paTot;
@@ -694,13 +694,13 @@ exit-animation="fade-out-animation">
 				this.UCTMme = (parseFloat(this.UCAMme) + parseFloat(this.UCEMme)).toFixed(2);
 
 				var periode=this.periode;
-				this.revDispMrPa=Math.round(result[1].menages[0].revdisp[periode]);
-				this.revDispMmePa=Math.round(result[2].menages[0].revdisp[periode]);
+				this.revenu_disponibleMrPa=Math.round(result[1].menages[0].revenu_disponible[periode]);
+				this.revenu_disponibleMmePa=Math.round(result[2].menages[0].revenu_disponible[periode]);
 
-console.log(this.UCEMr+" "+this.UCTMr+" "+this.revDispMrPa);
-				this.CoutEnfCpl = ((parseFloat(this.UCECpl)/parseFloat(this.UCTCpl))*parseFloat(this.revDispCpl)).toFixed(2);
-				this.CoutEnfMr = ((parseFloat(this.UCEMr)/parseFloat(this.UCTMr))*parseFloat(this.revDispMrPa)).toFixed(2);
-				this.CoutEnfMme = ((parseFloat(this.UCECpl)/parseFloat(this.UCTMme))*parseFloat(this.revDispMmePa)).toFixed(2);
+console.log(this.UCEMr+" "+this.UCTMr+" "+this.revenu_disponibleMrPa);
+				this.CoutEnfCpl = ((parseFloat(this.UCECpl)/parseFloat(this.UCTCpl))*parseFloat(this.revenu_disponibleCpl)).toFixed(2);
+				this.CoutEnfMr = ((parseFloat(this.UCEMr)/parseFloat(this.UCTMr))*parseFloat(this.revenu_disponibleMrPa)).toFixed(2);
+				this.CoutEnfMme = ((parseFloat(this.UCECpl)/parseFloat(this.UCTMme))*parseFloat(this.revenu_disponibleMmePa)).toFixed(2);
 			},
 			calculUcEnfant:function(scenar,result,coeff){
 				//Calcul des UC Enfants

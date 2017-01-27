@@ -5,7 +5,7 @@
 `openfisca-resultat`
 
 
-@demo demo/index.html 
+@demo demo/index.html
 -->
 
 <dom-module id="openfisca-resultat">
@@ -18,18 +18,18 @@
 			<!-- LOCAL STORAGE -->
 				<app-localstorage-document key="resultat" data="{{resultat}}">
 		</app-localstorage-document>
-		
+
     <h2>Couple</h2>
-	Revenu disponible 2015 : 
-	Niveau de vie net 2015 : 
+	Revenu disponible 2015 :
+	Niveau de vie net 2015 :
 	<table>
 		<tr><th></th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 			<tr>
 			<td>Revenu Disponible 2015</td>
-			<td>{{revDispCpl}}</td>
-			<td>{{revDispMr}}</td>
-			<td>{{revDispMme}}</td>
-			</tr>	
+			<td>{{revenu_disponibleCpl}}</td>
+			<td>{{revenu_disponibleMr}}</td>
+			<td>{{revenu_disponibleMme}}</td>
+			</tr>
 			<tr>
 			<td>Niveau de vie net 2015</td>
 			<td>{{nivvieCpl}}</td>
@@ -38,7 +38,7 @@
 			</tr>
 	</table>
 	
-	
+
   </template>
 
   <script>
@@ -51,13 +51,13 @@
           type: String,
           value: 'openfisca-resultat',
         },
-		revDispCpl:{
+		revenu_disponibleCpl:{
 			type : String
 			},
-		revDispMr:{
+		revenu_disponibleMr:{
 			type : String
 			},
-		revDispMme:{
+		revenu_disponibleMme:{
 			type : String
 			},
 		nivvieCpl:{
@@ -77,9 +77,9 @@
       },
 	  				_resultatChanged:function(resultat){
 					console.log(resultat);
-					console.log(resultat[0].menages[0].revdisp);
-					this.revDispCpl=resultat[0].menages[0].resdisp[2015];
-					
+					console.log(resultat[0].menages[0].revenu_disponible);
+					this.revenu_disponibleCpl=resultat[0].menages[0].resdisp[2015];
+
 				},
 
     });
