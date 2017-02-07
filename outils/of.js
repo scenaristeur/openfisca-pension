@@ -27,7 +27,22 @@ var data=  {
       "period": "2016"
     }
   ],
-  "variables": ["revdisp","rsa","pfam","nivvie"]
+  "variables": [
+      "revenu_disponible",
+      "revenu_initial",
+      "traitements_salaires_pensions_rentes",
+      "niveau_de_vie_net",
+      "irpp",
+      "minima_sociaux",
+      "uc",
+      "rsa",
+      "prestations_sociales",
+      "prestations_familiales",
+      "csg",
+      "aides_logement",
+      "salaire_imposable",
+      "csg"
+  ]
 };
 
 var localStorageData=localStorage.getItem("data2send");
