@@ -57,15 +57,15 @@
 		on-error="_handleErrorResponsePa">
 		</iron-ajax>
 
+<!--			Vous pouvez utiliser les "<a href="/bower_components/openfisca-pension/outils/" target="_blank">Outils OpenFisca</a>" pour vérifier les données envoyées au serveur de calcul et retournées par celui-ci.
+-->
 
 
-
-		<paper-button id="calculButton" raised on-tap="calcul" value="CALCUL">CALCUL <paper-spinner id="spinner" alt="Calcul en cours"> </paper-button>
+		<paper-button id="calculButton" raised on-tap="calcul" value="CALCUL">Calculer<paper-spinner id="spinner" alt="Calcul en cours"> </paper-button>
 
 			<h2>Résultat {{periode}}</h2>
-			Vous pouvez utiliser les "<a href="/bower_components/openfisca-pension/outils/" target="_blank">Outils OpenFisca</a>" pour vérifier les données envoyées au serveur de calcul et retournées par celui-ci.
-			<h3> Pension alimentaire calculée selon <a href="https://www.service-public.fr/particuliers/vosdroits/F991">le barème du Ministère de la Justice</a></h3>
-			(todo:déterminier le parent non gardien)
+			<h3> Le <a href="https://www.service-public.fr/particuliers/vosdroits/F991">barème</a> du Ministère de la Justice</h3>
+			<!--(todo:déterminier le parent non gardien)-->
 
 			<table border=2>
 				<tr>
@@ -114,9 +114,17 @@
 
 			</table>
 
+</br>
+</br>
+			<p>
+				<b>Conformément à l' <i>"Article 371-2 du code civil"</i> :</b></br>
+				Chacun des parents contribue à l'entretien et à l'éducation des enfants à proportion de ses ressources, de celles de l'autre parent, ainsi que des besoins de l'enfant.
+				(source : legifrance)
+			</p>
 
-
-			<h3> Incidence de cette pension sur le niveau de vie </h3>
+		</br>
+		</br>
+			<h3>Evaluation des ressources des deux parents et du coût des enfants</h3>
 
 			<table border=2>
 				<tr><th>Sans Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
@@ -139,54 +147,17 @@
 					<td>{{prestations_socialesMme}}</td>
 				</tr>
 				<tr>
-					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revenu_disponible" target="_blank">revenu_disponible</a>)</td>
+					<td>Prise en compte des charges de logement</td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><h3>Revenu Disponible</h3> (<a href="https://legislation.openfisca.fr/variables/revenu_disponible" target="_blank">revenu_disponible</a>)</td>
 					<td>{{revenu_disponibleCpl}}</td>
 					<td>{{revenu_disponibleMr}}</td>
 					<td>{{revenu_disponibleMme}}</td>
 				</tr>
-			</table>
-		</hr>
-		</bR>
-		</hr>
-			<table border=2>
-				<tr><th>Avec Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
-				<tr>
-					<td>Salaire Imposable (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
-					<td>{{simpCpl}}</td>
-					<td>{{simpMr}}</td>
-					<td>{{simpMme}}</td>
-				</tr>
-				<tr>
-					<td>Pension alimentaire ({{paTot}} *12)</td>
-					<td></td>
-					<td>{{paMra}}</td>
-					<td>{{paMmea}}</td>
-				</tr>
-				<tr>
-					<td>Salaire Imposable avec pension alimentaire (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
-					<td>{{simpCpl}}</td>
-					<td>{{simpMrPa}}</td>
-					<td>{{simpMmePa}}</td>
-				</tr>
-				<tr>
-					<td>Impôt sur le revenu (<a href="https://legislation.openfisca.fr/variables/irpp" target="_blank">irpp</a>) </td>
-					<td>{{irppCpl}}</td>
-					<td>{{irppMrPa}}</td>
-					<td>{{irppMmePa}}</td>
-				</tr>
-				<tr>
-					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/prestations_sociales" target="_blank">prestations_sociales</a>)</td>
-					<td>{{prestations_socialesCplPa}}</td>
-					<td>{{prestations_socialesMrPa}}</td>
-					<td>{{prestations_socialesMmePa}}</td>
-				</tr>
-				<tr>
-					<td>Revenu Disponible (<a href="https://legislation.openfisca.fr/variables/revenu_disponible" target="_blank">revenu_disponible</a>)</td>
-					<td>{{revenu_disponibleCpl}}</td>
-					<td>{{revenu_disponibleMrPa}}</td>
-					<td>{{revenu_disponibleMmePa}}</td>
-				</tr>
-
 			</table>
 
 </hr>
@@ -226,12 +197,146 @@ l’OCDE. </br>
 					<td>{{UCTMme}}</td>
 				</tr>
 				<tr>
-					<td>Coût d'entretien estimé des enfants (UCEnfant/UCTotal*RevenuDisp)</td>
+					<td>Coût d'entretien estimé des enfants </br> = UCEnfant/UCTotal*RevenuDisp sans pension</td>
 					<td>{{CoutEnfCpl}}</td>
 					<td>{{CoutEnfMr}}</td>
 					<td>{{CoutEnfMme}}</td>
 				</tr>
+			</table>
+
+			</br>
+			</hr>
+			</br>
+
+			<table border="2">
+
+			 	<tr>
+					<td>Total des ressources disponibles</td>
+					<td>{{TotRes}}</td>
+				</tr>
+				<tr>
+					<td>Coût total des enfants estimé</td>
+					<td>{{CoutEnfTot}}</td>
+				</tr>
+				<tr>
+					<td>Soit en pourcentage</td>
+					<td>{{CoutEnfTotPC}}</td>
+				</tr>
 </table>
+
+
+
+
+
+<table border = "2">
+	<tr>
+		<td>
+
+		</td>
+		<td>
+			Monsieur
+		</td>
+		<td>
+			Madame
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Revenus disponibles
+		</td>
+		<td>
+			{{revenu_disponibleMr}}
+		</td>
+		<td>
+			{{revenu_disponibleMme}}
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Part de l'entretien des enfants sur le total des ressources
+		</td>
+		<td>
+			{{CoutEnfTotPC}} %
+		</td>
+		<td>
+			{{CoutEnfTotPC}} %
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Charge des enfants répartie en fonction des ressources de chacun des parents
+		</td>
+		<td>
+			{{chargeMr}} €
+		</td>
+		<td>
+			{{chargeMme}} €
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Soit une différence à compenser de
+		</td>
+		<td>
+		(+/-)	xx{{diffMr}} €
+		</td>
+		<td>
+		(+/-)	xx{{diffMme}} €
+		</td>
+	</tr>
+</table>
+
+
+</hr>
+</bR>
+</hr>
+	<table border=2>
+		<tr><th>Avec Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
+		<tr>
+			<td>Salaire Imposable (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
+			<td>{{simpCpl}}</td>
+			<td>{{simpMr}}</td>
+			<td>{{simpMme}}</td>
+		</tr>
+		<tr>
+			<td>Pension alimentaire ({{paTot}} *12)</td>
+			<td></td>
+			<td>{{paMra}}</td>
+			<td>{{paMmea}}</td>
+		</tr>
+		<tr>
+			<td>Salaire Imposable avec pension alimentaire (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
+			<td>{{simpCpl}}</td>
+			<td>{{simpMrPa}}</td>
+			<td>{{simpMmePa}}</td>
+		</tr>
+		<tr>
+			<td>Impôt sur le revenu (<a href="https://legislation.openfisca.fr/variables/irpp" target="_blank">irpp</a>) </td>
+			<td>{{irppCpl}}</td>
+			<td>{{irppMrPa}}</td>
+			<td>{{irppMmePa}}</td>
+		</tr>
+		<tr>
+			<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/prestations_sociales" target="_blank">prestations_sociales</a>)</td>
+			<td>{{prestations_socialesCplPa}}</td>
+			<td>{{prestations_socialesMrPa}}</td>
+			<td>{{prestations_socialesMmePa}}</td>
+		</tr>
+		<tr>
+			<td>Prise en compte des charges de logement</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><h3>Revenu Disponible</h3> (<a href="https://legislation.openfisca.fr/variables/revenu_disponible" target="_blank">revenu_disponible</a>)</td>
+			<td>{{revenu_disponibleCpl}}</td>
+			<td>{{revenu_disponibleMrPa}}</td>
+			<td>{{revenu_disponibleMmePa}}</td>
+		</tr>
+
+	</table>
+
 				<!--
 				<tr>
 					<td>Salaires imposables (<a href="https://legislation.openfisca.fr/variables/salaire_imposable">salaire_imposable</a>)</td>
@@ -393,6 +498,13 @@ exit-animation="fade-out-animation">
 			CoutEnfCpl:{type : Number},
 			CoutEnfMr:{type : Number},
 			CoutEnfMme:{type : Number},
+			CoutEnfTot:{type : Number},
+			CoutEnfTotPC:{type : Number},
+			chargeMr:{type : Number},
+			chargeMme:{type : Number},
+			diffMr:{type : Number},
+			diffMme:{type : Number},
+			TotRes:{type : Number},
 			UCACpl:{type : Number},
 			UCAMr:{type : Number},
 			UCAMme:{type : Number},
@@ -699,8 +811,14 @@ exit-animation="fade-out-animation">
 
 console.log(this.UCEMr+" "+this.UCTMr+" "+this.revenu_disponibleMrPa);
 				this.CoutEnfCpl = ((parseFloat(this.UCECpl)/parseFloat(this.UCTCpl))*parseFloat(this.revenu_disponibleCpl)).toFixed(2);
-				this.CoutEnfMr = ((parseFloat(this.UCEMr)/parseFloat(this.UCTMr))*parseFloat(this.revenu_disponibleMrPa)).toFixed(2);
-				this.CoutEnfMme = ((parseFloat(this.UCECpl)/parseFloat(this.UCTMme))*parseFloat(this.revenu_disponibleMmePa)).toFixed(2);
+				this.CoutEnfMr = ((parseFloat(this.UCEMr)/parseFloat(this.UCTMr))*parseFloat(this.revenu_disponibleMr)).toFixed(2);
+				this.CoutEnfMme = ((parseFloat(this.UCECpl)/parseFloat(this.UCTMme))*parseFloat(this.revenu_disponibleMme)).toFixed(2);
+				this.CoutEnfTot = parseFloat(this.CoutEnfMr) + 	parseFloat(this.CoutEnfMme);
+				this.TotRes = parseFloat(this.revenu_disponibleMr) + parseFloat(this.revenu_disponibleMme);
+				this.CoutEnfTotPC = parseFloat(this.CoutEnfTot) * 100 / parseFloat(this.TotRes);
+				this.chargeMr = parseFloat(this.revenu_disponibleMr) * parseFloat(this.CoutEnfTotPC) / 100;
+				this.chargeMme = parseFloat(this.revenu_disponibleMme) * parseFloat(this.CoutEnfTotPC) / 100;
+				//cout des enf *100 / restot
 			},
 			calculUcEnfant:function(scenar,result,coeff){
 				//Calcul des UC Enfants
