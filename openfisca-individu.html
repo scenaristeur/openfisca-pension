@@ -33,8 +33,10 @@
 
 
 		<h2>Indiquez les membres de la famille</h2>
+		<h4>Afin de déterminer les ressources des parents, saisissez ci-dessous les membres de la famille avant séparation avec leur date de naissance et le revenu imposable annuel et validez en cliquant sur le bouton '+'</h4>
+
 		<!-- formulaire saisie membres -->
-	    <paper-input id="indivNomInput" value="{{individu.id}}" label="Nom" ></paper-input>
+	    <paper-input id="indivNomInput" value="{{individu.id}}" label="Prénom" ></paper-input>
 		<!--<paper-dropdown-menu label="Hierarchie">
 			<paper-listbox
 			class="dropdown-content"
@@ -45,7 +47,7 @@
 			</template>
 			</paper-listbox>
 		</paper-dropdown-menu>-->
-		<paper-input id="dateN" type="date" value="{{individu.date_naissance}}" label="Date de Naissance" ></paper-input>
+		<paper-input id="dateN" type="date" value="{{individu.date_naissance}}" label="Date de Naissance (Si vous utilisez Firefox, au format AAAA-MM-JJ, exemple : 1977-05-14 )" ></paper-input>
 		<paper-input type="number" value="{{individu.salaire_imposable}}" label="Salaire imposable (annuel en €)"></paper-input>
 
 		<paper-fab

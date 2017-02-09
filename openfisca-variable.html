@@ -6,9 +6,9 @@
 
 <!--
 	`openfisca-variable`
-	
-	
-	@demo demo/index.html 
+
+
+	@demo demo/index.html
 -->
 
 <dom-module id="openfisca-variable">
@@ -22,11 +22,12 @@
 		</app-localstorage-document>
 				<app-localstorage-document key="modeGarde" data="{{modeGarde}}">
 		</app-localstorage-document>
-		
-		Commençons par définir la période d'étude : </br>
+
+		<h4>Définissez maintenant la période de calcul et le mode de garde des enfants</h4>
+
 		<paper-dropdown-menu label="Periode" horizontal-align="left">
-			<paper-listbox 
-			class="dropdown-content" 
+			<paper-listbox
+			class="dropdown-content"
 			selected="{{periodeId}}"
 			attr-for-selected="myid">
 				<template is="dom-repeat" items="{{periodes}}" as="periode" index-as="periodeId">
@@ -34,10 +35,10 @@
 				</template>
 			</paper-listbox>
 		</paper-dropdown-menu>
-		</br>et le mode de garde : </br>
+
 		<paper-dropdown-menu label="Mode de garde" horizontal-align="left">
-			<paper-listbox 
-			class="dropdown-content" 
+			<paper-listbox
+			class="dropdown-content"
 			selected="{{gardeId}}"
 			attr-for-selected="myid">
 				<template is="dom-repeat" items="{{gardes}}" as="garde" index-as="gardeId">
@@ -45,15 +46,14 @@
 				</template>
 			</paper-listbox>
 		</paper-dropdown-menu>
-		</br>
-		(+ choix des variables de sortie)
-	</template>
 	
+	</template>
+
 	<script>
 		Polymer({
-			
+
 			is: 'openfisca-variable',
-			
+
 			properties: {
 				data2send : {
 					type : Object,
@@ -62,7 +62,7 @@
 				},
 				periodes :{
 					type : Array,
-					value : ["2016","2015","2014","2013","2012","2011","2010"]      
+					value : ["2016","2015","2014","2013","2012","2011","2010"]
 				},
 				periode : {
 					computed : 'computePeriode(periodeId)',
@@ -72,14 +72,14 @@
 				},
 				periodeId : {
 					notify : true  ,
-					value: 0    
+					value: 0
 				} ,
 				modeGarde : {
-					notify : true  
+					notify : true
 				} ,
 				gardes :{
 					type : Array,
-					value : ["Réduit","Classique","Garde Alternée"]      
+					value : ["Réduit","Classique","Garde Alternée"]
 				},
 				garde : {
 					computed : 'computeGarde(gardeId)',
@@ -89,18 +89,18 @@
 				},
 				gardeId : {
 					notify : true  ,
-					value: 0    
+					value: 0
 				} ,
 			},
 		  	computePeriode : function(id){
 				//	var per=this.periodes[this.periode];
 				console.log("updatePer"+id);
 				return id;
-			}  , 
+			}  ,
 			computeGarde : function(id){
 				console.log("updateGarde"+id);
 				return id;
-			}  , 
+			}  ,
 			_gardeChanged: function(newGarde,oldGarde){
 				this.modeGarde=newGarde;
 				},

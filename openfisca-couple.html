@@ -11,8 +11,8 @@
 <!--
 	`openfisca-couple`
 	element couple utile à openfisca-pension , scenaristeur/Pa-Comp
-	
-	@demo demo/index.html 
+
+	@demo demo/index.html
 -->
 
 <dom-module id="openfisca-couple">
@@ -22,68 +22,70 @@
 			display: block;
 			}
 		</style>
-		
+
 		<!-- LOCAL STORAGE -->
 		<app-localstorage-document key="data2send" data="{{data2send}}">
 		</app-localstorage-document>
 		<app-localstorage-document key="individus" data="{{individus}}">
 		</app-localstorage-document>
-		
+
+		<h4>Indiquez le statut de chaque membre de la famille dans le scénario 'Couple avant séparation', ainsi que les caractéristique du logement afin de déterminer les aides sociales accessibles.</h4>
+
 		<table border=1>
 		<template is="dom-repeat" items="{{individus}}" as="individu" index-as="individuId">
 		<tr>
 			<td>
 				<paper-item  >{{individu.id}}
 			</td>
-			
-						
+
+
 			<td style="width:100%">
 				<!--on-paper-dropdown-close="fromAccountChanged"-->
 				<paper-dropdown-menu  id="cpl{{individu.id}}" style="width:100%" horizontal-align="left" label="Statut dans le scenario 'Couple'" >
-					<paper-listbox 
+					<paper-listbox
 					id="cplLB{{individu.id}}"
-					class="dropdown-content" 
+					class="dropdown-content"
 					selected="{{statutId}}"
 					attr-for-selected="myid">
 						<template is="dom-repeat" items="{{statuts}}" as="statut" index-as="statutId">
 							<paper-item myid="cpl,[[individu.id]],[[statutId]]" >[[statut]]</paper-item></hr>
 						</template>
-						
+
 					</paper-listbox>
 				</paper-dropdown-menu>
 			</td>
-			
-			
+
+
 			</paper-item>
 		</tr>
-			
+
 		</template>
 		</table>
-		
-		
+
+
 		<h2>Occupation du logement</h2>
-		
+
 		<paper-input id="loyerInput" type="number" value="{{loyer}}" label="Loyer mensuel en €uros" ></paper-input>
 		<paper-dropdown-menu label="Occupation du logement"  vertical-align="bottom" horizontal-align="left" style="width:100%">
-			<paper-listbox 
+			<paper-listbox
 			id="statutLogement"
-			class="dropdown-content" 
+			class="dropdown-content"
 			selected="{{statutOccId}}"
 			attr-for-selected="myid">
 				<template is="dom-repeat" items="{{logementOccupationStatuts}}" as="statutOcc" index-as="statutOccId">
 					<paper-item myid="[[statutOccId]]">[[statutOcc]]</paper-item>
 				</template>
-				
+
 			</paper-listbox>
 		</paper-dropdown-menu>
 	</template>
-	
-	
+
+
 	<script>
 		Polymer({
-			
+
 			is: 'openfisca-couple',
-			
+
 			properties: {
 				suggestions :{
 					type : Array,
@@ -97,10 +99,10 @@
 				},
 				statuts :{
 					type : Array,
-					value : ["Déclarant / Personne de référence","Déclarant / Conjoint","Enfant / Personne à charge","Pas dans ce scénario"]      
+					value : ["Déclarant / Personne de référence","Déclarant / Conjoint","Enfant / Personne à charge","Pas dans ce scénario"]
 				},
 				statutId :{
-					notify : true			
+					notify : true
 				},
 				statut : {
 					computed : 'computeStatut(statutId)',
@@ -112,7 +114,7 @@
 					value : ["Non renseigné", "Accédant à la propriété", "Propriétaire (non accédant) du logement", "Locataire d'un logement HLM", "Locataire ou sous-locataire d'un logement loué vide non-HLM", "Locataire ou sous-locataire d'un logement loué meublé ou d'une chambre d'hôtel", "Logé gratuitement par des parents, des amis ou l'employeur","Locataire d'un foyer (résidence universitaire, maison de retraite, foyer de jeune travailleur, résidence sociale...)", "Sans domicile stable"]
 				},
 				statutOccId :{
-					notify : true			
+					notify : true
 				},
 				statutOcc : {
 					computed : 'computeStatutOcc(statutOccId)',
@@ -125,9 +127,9 @@
 					observer: '_loyerChanged'
 				},
 			},
-			
+
 			//FONCTIONS
-			
+
 			fromAccountChanged: function(event) {
 console.log(this.$.cplDavid);
 console.log(this.$.cplLBDavid);
@@ -174,39 +176,39 @@ console.log(this.$.cplLBDavid);
 				this.data2send={};
 				this.data2send=dataTemp;
 				console.log(dataTemp);
-				
+
 			},
 			computeStatutOcc : function(id){
 				console.log(id);
 				this.updateLogement(id);
 				return id;
-			},	
+			},
 			selection : function(data){
 				console.log(data);
-			
-			},			
-			
+
+			},
+
 			updateScenarios : function(id){
 				console.log(id);
 				var updateparams = id.split(",");
-				console.log(updateparams[0]+" + "+updateparams[1]+" + "+updateparams[2]); 
+				console.log(updateparams[0]+" + "+updateparams[1]+" + "+updateparams[2]);
 				var individu = updateparams[1];
 				var scenarios=this.data2send.scenarios;
 				var scenario;
 				var statut="";
 				var individuComplet ={};
-				
+
 				for (var i=0; i <this.individus.length;i++){
 					var indTemp = this.individus[i];
 					var indTempId = indTemp.id;
 					if(indTempId == individu){
-						individuComplet = indTemp;		
+						individuComplet = indTemp;
 					}
 				}
-				
+
 				console.log(individuComplet);
-				
-				
+
+
 				switch(updateparams[0]) {
 					case "cpl":
 					console.log("COUPLE");
@@ -224,142 +226,142 @@ console.log(this.$.cplLBDavid);
 					default:
 					console.log("ERREUR, je ne comprend pas l'identifiant");
 				}
-				
+
 				//recuperation du testcase
-				var testcase=scenario.test_case;			
-				
-				
+				var testcase=scenario.test_case;
+
+
 				//nettoyage dans testcase.INDIVIDUS TOUT LOBJET (evite les doublons)
 					var listToDelete = [individu];
 					for (var i = testcase.individus.length - 1; i >= 0; i--) {
 						var obj = testcase.individus[i];
-						
+
 						if (listToDelete.indexOf(obj.id) !== -1) {
 							testcase.individus.splice(i, 1);
 						}
-					}	
-				
-				
+					}
+
+
 				switch(updateparams[2]) {
 					case "0":
 					statut= "pers_ref";
 					//AJOUT DANS individus
-					this.addItem(testcase.individus,individuComplet); 
-					
+					this.addItem(testcase.individus,individuComplet);
+
 					//AJOUT DANS FAMILLE parents , suppression dans famille enfants
 					this.addItem(testcase.familles[0].parents,individu);
 					this.removeItem(testcase.familles[0].enfants,individu);
-					
+
 					//AJOUT DANS Foyer declarants , suppression dans foyer pac
 					this.addItem(testcase.foyers_fiscaux[0].declarants,individu);
 					this.removeItem(testcase.foyers_fiscaux[0].personnes_a_charge,individu);
-					
+
 					//AJOUT DANS Menages pers de ref , suppression conjoint et enfants
-					testcase.menages[0].personne_de_reference=individu; 
+					testcase.menages[0].personne_de_reference=individu;
 					if(testcase.menages[0].conjoint==individu){
 						testcase.menages[0].conjoint="";
-					} 	
-					this.removeItem(testcase.menages[0].enfants,individu);      			
-					
+					}
+					this.removeItem(testcase.menages[0].enfants,individu);
+
 					break;
 					case "1":
 					statut = "conjoint";
 					//AJOUT DANS individus
-					this.addItem(testcase.individus,individuComplet); 
-					
+					this.addItem(testcase.individus,individuComplet);
+
 					//AJOUT DANS FAMILLE parents , suppression dans famille enfants
 					this.addItem(testcase.familles[0].parents,individu);
 					this.removeItem(testcase.familles[0].enfants,individu);
-					
+
 					//AJOUT DANS Foyer declarants , suppression dans foyer pac
 					this.addItem(testcase.foyers_fiscaux[0].declarants,individu);
 					this.removeItem(testcase.foyers_fiscaux[0].personnes_a_charge,individu);
-					
+
 					//AJOUT DANS Menages conjoint , suppression pers de ref et enfants
-					testcase.menages[0].conjoint=individu; 
+					testcase.menages[0].conjoint=individu;
 					if(testcase.menages[0].personne_de_reference==individu){
 						testcase.menages[0].personne_de_reference="";
-					} 	
-					this.removeItem(testcase.menages[0].enfants,individu);          			
-					
-					
+					}
+					this.removeItem(testcase.menages[0].enfants,individu);
+
+
 					break;
 					case "2":
 					statut = "pac";
 					//AJOUT DANS individus
-					this.addItem(testcase.individus,individuComplet); 
-					
+					this.addItem(testcase.individus,individuComplet);
+
 					//AJOUT DANS FAMILLE comme enfant et suppression eventuelle dans parent
-					this.addItem(testcase.familles[0].enfants,individu);      			
+					this.addItem(testcase.familles[0].enfants,individu);
 					this.removeItem(testcase.familles[0].parents,individu);
-					
+
 					//AJOUT DANS Foyer pac , suppression dans foyer declarants
-					this.addItem(testcase.foyers_fiscaux[0].personnes_a_charge,individu); 
-					this.removeItem(testcase.foyers_fiscaux[0].declarants,individu);	
-					
+					this.addItem(testcase.foyers_fiscaux[0].personnes_a_charge,individu);
+					this.removeItem(testcase.foyers_fiscaux[0].declarants,individu);
+
 					//AJOUT DANS Menages enfants suppression pers de ref , et conjoint
-					this.addItem(testcase.menages[0].enfants,individu); 
+					this.addItem(testcase.menages[0].enfants,individu);
 					if(testcase.menages[0].personne_de_reference==individu){
 						testcase.menages[0].personne_de_reference="";
-					} 	
+					}
 					if(testcase.menages[0].conjoint==individu){
 						testcase.menages[0].conjoint="";
-					} 	
-					
-					
+					}
+
+
 					break;
 					case "3":
 					statut = "pas dans ce scenar";
-				
-					
-					
+
+
+
 					/*for (var i=0; i <testcase.individus.length;i++){
 						var indTemp = testcase.individus[i];
 						var indTempId = indTemp.id;
 						if(indTempId == individu){
 						//enlever indTemp de testcase.individus
-						
-						
+
+
 						}
-					}    	*/	
-					
+					}    	*/
+
 					//REMOVE DANS FAMILLE dans parents et dans enfants
 					this.removeItem(testcase.familles[0].parents,individu);
 					this.removeItem(testcase.familles[0].enfants,individu);
-					
+
 					//REMOVE DANS FOYERS dans declarants et pac
 					this.removeItem(testcase.foyers_fiscaux[0].declarants,individu);
 					this.removeItem(testcase.foyers_fiscaux[0].personnes_a_charge,individu);
-					
+
 					//REMOVE DANS Menages enfants  pers de ref , et conjoint
 					if(testcase.menages[0].personne_de_reference==individu){
 						testcase.menages[0].personne_de_reference="";
-					} 	
+					}
 					if(testcase.menages[0].conjoint==individu){
 						testcase.menages[0].conjoint="";
-					} 		
-					this.removeItem(testcase.menages[0].enfants,individu); 				
-					
+					}
+					this.removeItem(testcase.menages[0].enfants,individu);
+
 					break;
 					default:
 					console.log("ERREUR, je ne comprend pas le statut");
-				}			
-				
-				
-				
-				
+				}
+
+
+
+
 				console.log(individu+" devient "+statut+" dans le scenario");
 				console.log(scenario);
 				//UPDATE MANUELLE
 				var dataTemp=this.data2send;
 				this.data2send=[];
 				this.data2send=dataTemp;
-				
-				
-				
+
+
+
 				console.log(this.data2send);
 
-			},		
+			},
 			/*
 			addToIndiv : function(individus,individu){
 				console.log(individus);
@@ -373,33 +375,32 @@ console.log(this.$.cplLBDavid);
 					if(id==ind.id){
 						trouve=true;
 					//individus.splice(i, 1);
-						console.log("supprime "+ i); 
+						console.log("supprime "+ i);
 					}else{
 						console.log("garde "+i);
 					}
-					
+
 				}
-				
+
 				this.addItem(individus,individu);
 				console.log("ajout");
 				console.log(individus);
-				
+
 			},*/
 			addItem : function(array,item){
 				if (array.indexOf(item) == -1){
 					console.log("pas trouvé ");
-					array.push(item); 
+					array.push(item);
 				}
-				
+
 			},
 			removeItem: function(array,item){
 				var itemIndex = 0;
 				while ((itemIndex = array.indexOf(item, itemIndex)) > -1) {
 					array.splice(itemIndex, 1);
-				}	
+				}
 			},
-			
+
 		});
 	</script>
 </dom-module>
-

@@ -60,59 +60,13 @@
 <!--			Vous pouvez utiliser les "<a href="/bower_components/openfisca-pension/outils/" target="_blank">Outils OpenFisca</a>" pour vérifier les données envoyées au serveur de calcul et retournées par celui-ci.
 -->
 
+<h4>Cliquez maintenant sur le bouton 'CALCULER' pour obtenir une estimation des ressources des deux parents, du coût des enfants et d'une contribution en fonction de ces paramètres.</h4>
+
 
 		<paper-button id="calculButton" raised on-tap="calcul" value="CALCUL">Calculer<paper-spinner id="spinner" alt="Calcul en cours"> </paper-button>
 
 			<h2>Résultat {{periode}}</h2>
-			<h3> Le <a href="https://www.service-public.fr/particuliers/vosdroits/F991">barème</a> du Ministère de la Justice</h3>
-			<!--(todo:déterminier le parent non gardien)-->
 
-			<table border=2>
-				<tr>
-					<td>
-						Ressources mensuelles du parent non-gardien
-
-					</td>
-					<td>
-						{{sImpMrMen}} €
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Minimum vital {{periode}} (RSA : {{minima_sociauxMr}} €)
-					</td>
-					<td>
-						{{minima_sociauxMr}} €
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Après déduction
-					</td>
-					<td>
-						{{salMonMoinsminima_sociaux}} €
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Nombre d'enfants : {{nbEnfants}} </br>
-						Mode de garde : {{modeGarde}} </br>
-
-					</td>
-					<td>
-					{{salMonMoinsminima_sociaux}} * {{tx}} % = {{paParEnf}} € par enfant
-					</td>
-					</tr>
-					<tr>
-					<td>
-						<b><u>Pension alimentaire à régler par le parent non gardien</u></b>
-					</td>
-					<td>
-						<div style="font-color:red">{{paTot}} €</div>
-					</td>
-				</tr>
-
-			</table>
 
 </br>
 </br>
@@ -124,49 +78,53 @@
 
 		</br>
 		</br>
-			<h3>Evaluation des ressources des deux parents et du coût des enfants</h3>
+			<h3>Evaluation des ressources des deux parents</h3>
 
 			<table border=2>
-				<tr><th>Sans Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
+				<tr><th></th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 				<tr>
 					<td>Salaire Imposable (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
-					<td>{{simpCpl}}</td>
-					<td>{{simpMr}}</td>
-					<td>{{simpMme}}</td>
+					<td align="right">{{simpCpl}} €</td>
+					<td align="right">{{simpMr}} €</td>
+					<td align="right">{{simpMme}} €</td>
 				</tr>
 				<tr>
 					<td>Impôt sur le revenu (<a href="https://legislation.openfisca.fr/variables/irpp" target="_blank">irpp</a>) </td>
-					<td>{{irppCpl}}</td>
-					<td>{{irppMr}}</td>
-					<td>{{irppMme}}</td>
+					<td align="right">{{irppCpl}} €</td>
+					<td align="right">{{irppMr}} €</td>
+					<td align="right">{{irppMme}} €</td>
 				</tr>
 				<tr>
-					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/prestations_sociales" target="_blank">prestations_sociales</a>)</td>
-					<td>{{prestations_socialesCpl}}</td>
-					<td>{{prestations_socialesMr}}</td>
-					<td>{{prestations_socialesMme}}</td>
+					<td>Prestations sociales (<a href="https://legislation.openfisca.fr/variables/prestations_sociales" target="_blank">prestations_sociales</a>) </br>
+					(prestations_familiales + minima_sociaux + aides_logement)</td>
+					<td align="right">{{prestations_socialesCpl}} € </td>
+					<td align="right">{{prestations_socialesMr}} €</td>
+					<td align="right">{{prestations_socialesMme}} €</td>
 				</tr>
 				<tr>
 					<td>Prise en compte des charges de logement</td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td align="right">{{loyerCpl}} €</td>
+					<td align="right">{{loyerMr}} €</td>
+					<td align="right">{{loyerMme}} €</td>
 				</tr>
 				<tr>
 					<td><h3>Revenu Disponible</h3> (<a href="https://legislation.openfisca.fr/variables/revenu_disponible" target="_blank">revenu_disponible</a>)</td>
-					<td>{{revenu_disponibleCpl}}</td>
-					<td>{{revenu_disponibleMr}}</td>
-					<td>{{revenu_disponibleMme}}</td>
+					<td align="right">{{revenu_disponibleCpl}} €</td>
+					<td align="right">{{revenu_disponibleMr}} €</td>
+					<td align="right">{{revenu_disponibleMme}} €</td>
+				</tr>
+				<tr>
+					<td colspan="2">Revenu disponible total</td>
+					<td colspan="2" align="right"><h3>{{TotRes}} €</h3></td>
 				</tr>
 			</table>
 
-</hr>
-</bR>
-</hr>
+</br>
 
-
-Calcul des Unités de Consommation : L’INSEE a adopté, depuis le début des années 2000, l’échelle d’équivalence utilisée par
-l’OCDE. </br>
+<h3>Calcul des Unités de Consommation et du coût des enfants</h3>
+<p>L’INSEE a adopté, depuis le début des années 2000, l’échelle d’équivalence utilisée par
+l’OCDE. </p>
+</br>
 			<table border=2>
 				<tr><th></th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 				<tr>
@@ -197,41 +155,27 @@ l’OCDE. </br>
 					<td>{{UCTMme}}</td>
 				</tr>
 				<tr>
-					<td>Coût d'entretien estimé des enfants </br> = UCEnfant/UCTotal*RevenuDisp sans pension</td>
-					<td>{{CoutEnfCpl}}</td>
-					<td>{{CoutEnfMr}}</td>
-					<td>{{CoutEnfMme}}</td>
+					<td>Coût d'entretien estimé des enfants </br> = UCEnfant/UCTotal*Revenu disponible,</br>
+						avec revenu disponible = {{TotRes}}</td>
+					<td align="right">{{CoutEnfCpl}} €</td>
+					<td align="right">{{CoutEnfMr}} €</td>
+					<td align="right">{{CoutEnfMme}} €</td>
+				</tr>
+				<tr>
+					<td colspan="2">Coût total d'entretien des enfants</td>
+					<td colspan="2" align="right"><h3>{{CoutEnfTot}} €</h3></td>
 				</tr>
 			</table>
 
-			</br>
-			</hr>
-			</br>
+</br>
 
-			<table border="2">
-
-			 	<tr>
-					<td>Total des ressources disponibles</td>
-					<td>{{TotRes}}</td>
-				</tr>
-				<tr>
-					<td>Coût total des enfants estimé</td>
-					<td>{{CoutEnfTot}}</td>
-				</tr>
-				<tr>
-					<td>Soit en pourcentage</td>
-					<td>{{CoutEnfTotPC}}</td>
-				</tr>
-</table>
-
-
-
-
-
+<h3> Répartition du coût des enfants en fonction des ressources disponibles de chacun des parents </h3>
 <table border = "2">
 	<tr>
 		<td>
-
+		</td>
+		<td>
+				Total
 		</td>
 		<td>
 			Monsieur
@@ -242,55 +186,114 @@ l’OCDE. </br>
 	</tr>
 	<tr>
 		<td>
-			Revenus disponibles
+			Ressources disponibles
 		</td>
-		<td>
-			{{revenu_disponibleMr}}
-		</td>
-		<td>
-			{{revenu_disponibleMme}}
-		</td>
+		<td align="right">{{TotRes}} €</td>
+		<td align="right">{{revenu_disponibleMr}} €</td>
+		<td align="right">{{revenu_disponibleMme}} €</td>
 	</tr>
 	<tr>
 		<td>
-			Part de l'entretien des enfants sur le total des ressources
+			Estimation du coût total des enfants
 		</td>
-		<td>
-			{{CoutEnfTotPC}} %
-		</td>
-		<td>
-			{{CoutEnfTotPC}} %
-		</td>
+		<td align="right">{{CoutEnfTot}} €</td>
+		<td colspan="2"></td>
 	</tr>
 	<tr>
 		<td>
+			Soit en pourcentage
+		</td>
+		<td align="right">{{CoutEnfTotPC}} %</td>
+		<td align="right">{{CoutEnfTotPC}} %</td>
+		<td align="right">{{CoutEnfTotPC}} %</td>
+	</tr>
+	<tr>
+		<td colspan="2">
 			Charge des enfants répartie en fonction des ressources de chacun des parents
 		</td>
-		<td>
-			{{chargeMr}} €
-		</td>
-		<td>
-			{{chargeMme}} €
-		</td>
+		<td align="right">{{chargeMr}} €</td>
+		<td align="right">{{chargeMme}} €</td>
 	</tr>
 	<tr>
-		<td>
+		<td colspan="2">
 			Soit une différence à compenser de
 		</td>
-		<td>
-		(+/-)	xx{{diffMr}} €
+		<td align="right">{{diffMr}} €</td>
+		<td align="right">{{diffMme}} €</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			<h3>Estimation de la différence menusuelle à compenser</h3>
+			(si positif : à verser, si négatif : à percevoir)
 		</td>
-		<td>
-		(+/-)	xx{{diffMme}} €
-		</td>
+		<td align="right"><h4>{{diffMrMens}} €</h4></td>
+		<td align="right"><h3>{{diffMmeMens}} €</h3></td>
 	</tr>
 </table>
 
 
-</hr>
-</bR>
-</hr>
++ recalcul des impots
+</br>
+</br>
+</br>
+</br>
+<hr>
+<h3>A titre de comparaison ci-dessous la pension alimentaire en appliquant le barème du Ministère de la Justice et les ressources disponibles</h3>
+
+<hr>
+
+<p> Le <a href="https://www.service-public.fr/particuliers/vosdroits/F991">barème</a> du Ministère de la Justice</p>
+<!--(todo:déterminier le parent non gardien)-->
+
+<table border=2>
+	<tr>
+		<td>
+			Ressources mensuelles du parent non-gardien
+
+		</td>
+		<td>
+			{{sImpMrMen}} €
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Minimum vital {{periode}} (RSA : {{minima_sociauxMr}} €)
+		</td>
+		<td>
+			{{minima_sociauxMr}} €
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Après déduction
+		</td>
+		<td>
+			{{salMonMoinsminima_sociaux}} €
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Nombre d'enfants : {{nbEnfants}} </br>
+			Mode de garde : {{modeGarde}} </br>
+
+		</td>
+		<td>
+		{{salMonMoinsminima_sociaux}} * {{tx}} % = {{paParEnf}} € par enfant
+		</td>
+		</tr>
+		<tr>
+		<td>
+			<b><u>Pension alimentaire à régler par le parent non gardien</u></b>
+		</td>
+		<td>
+			<div style="font-color:red">{{paTot}} €</div>
+		</td>
+	</tr>
+
+</table>
+
 	<table border=2>
+		<h3>Ressources disponibles après application du barème du Ministère de la Justice.</h3>
 		<tr><th>Avec Pension Alimentaire</th><th>Couple</th><th>Monsieur</th><th>Madame</th></tr>
 		<tr>
 			<td>Salaire Imposable (<a href="https://legislation.openfisca.fr/variables/salaire_imposable" target="_blank">salaire_imposable</a>)</td>
@@ -504,6 +507,8 @@ exit-animation="fade-out-animation">
 			chargeMme:{type : Number},
 			diffMr:{type : Number},
 			diffMme:{type : Number},
+			diffMrMens:{type : Number},
+			diffMmeMens:{type : Number},
 			TotRes:{type : Number},
 			UCACpl:{type : Number},
 			UCAMr:{type : Number},
@@ -520,6 +525,9 @@ exit-animation="fade-out-animation">
 			prestations_socialesCpl:{type : String},
 			prestations_socialesMr:{type : String},
 			prestations_socialesMme:{type : String},
+			loyerCpl:{type : String},
+			loyerMr:{type : String},
+			loyerMme:{type : String},
 			irppCpl:{type : Number},
 			irppMr:{type : Number},
 			irppMme:{type : Number},
@@ -698,6 +706,8 @@ exit-animation="fade-out-animation">
 				this.prestations_socialesMr=Math.round(result[1].familles[0].prestations_sociales[periode]);
 				this.prestations_socialesMme=Math.round(result[2].familles[0].prestations_sociales[periode]);
 
+
+
 				this.minima_sociauxCpl=Math.round(result[0].familles[0].minima_sociaux[periode]);
 				this.minima_sociauxMr=Math.round(result[1].familles[0].minima_sociaux[periode]);
 				this.minima_sociauxMme=Math.round(result[2].familles[0].minima_sociaux[periode]);
@@ -810,14 +820,19 @@ exit-animation="fade-out-animation">
 				this.revenu_disponibleMmePa=Math.round(result[2].menages[0].revenu_disponible[periode]);
 
 console.log(this.UCEMr+" "+this.UCTMr+" "+this.revenu_disponibleMrPa);
-				this.CoutEnfCpl = ((parseFloat(this.UCECpl)/parseFloat(this.UCTCpl))*parseFloat(this.revenu_disponibleCpl)).toFixed(2);
+				this.TotRes = parseFloat(this.revenu_disponibleMr) + parseFloat(this.revenu_disponibleMme);
+				this.CoutEnfCpl = ((parseFloat(this.UCECpl)/parseFloat(this.UCTCpl))*parseFloat(this.TotRes)).toFixed(2);
 				this.CoutEnfMr = ((parseFloat(this.UCEMr)/parseFloat(this.UCTMr))*parseFloat(this.revenu_disponibleMr)).toFixed(2);
 				this.CoutEnfMme = ((parseFloat(this.UCECpl)/parseFloat(this.UCTMme))*parseFloat(this.revenu_disponibleMme)).toFixed(2);
-				this.CoutEnfTot = parseFloat(this.CoutEnfMr) + 	parseFloat(this.CoutEnfMme);
-				this.TotRes = parseFloat(this.revenu_disponibleMr) + parseFloat(this.revenu_disponibleMme);
-				this.CoutEnfTotPC = parseFloat(this.CoutEnfTot) * 100 / parseFloat(this.TotRes);
-				this.chargeMr = parseFloat(this.revenu_disponibleMr) * parseFloat(this.CoutEnfTotPC) / 100;
-				this.chargeMme = parseFloat(this.revenu_disponibleMme) * parseFloat(this.CoutEnfTotPC) / 100;
+				this.CoutEnfTot = (parseFloat(this.CoutEnfMr) + 	parseFloat(this.CoutEnfMme)).toFixed(2);
+
+				this.CoutEnfTotPC = (parseFloat(this.CoutEnfTot) * 100 / parseFloat(this.TotRes)).toFixed(2);
+				this.chargeMr = (parseFloat(this.revenu_disponibleMr) * parseFloat(this.CoutEnfTotPC) / 100).toFixed(2);
+				this.chargeMme = (parseFloat(this.revenu_disponibleMme) * parseFloat(this.CoutEnfTotPC) / 100).toFixed(2);
+				this.diffMr = (parseFloat(this.chargeMr) - parseFloat(this.CoutEnfMr)).toFixed(2);
+				this.diffMme = (parseFloat(this.chargeMme) - parseFloat(this.CoutEnfMme)).toFixed(2);
+				this.diffMrMens = (parseFloat (this.diffMr) /12).toFixed(2);
+				this.diffMmeMens = (parseFloat(this.diffMme) /12).toFixed(2);
 				//cout des enf *100 / restot
 			},
 			calculUcEnfant:function(scenar,result,coeff){
@@ -872,6 +887,14 @@ console.log(this.UCEMr+" "+this.UCTMr+" "+this.revenu_disponibleMrPa);
 				//console.log(this.data2send);
 				this.$.spinner.active=true;
 				this.resultat=[];
+				this.simpCpl = null;
+				this.simpMr = null;
+				this.simpMme = null;
+				this.revenu_disponible = null;
+				this.CoutEnfTotPC = null;
+				this.CoutEnfTot = null;
+				this.diffMrMens = null;
+				this.diffMmeMens = null;
 				this.$.ajaxcalculate.generateRequest();
 			},
 			_dataChanged:function(data){
