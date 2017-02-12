@@ -12,11 +12,11 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
   "homepage": "https://github.com/scenaristeur/openfisca-pension",
-  "_release": "f33aff97cc",
+  "_release": "0aa9830343",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "f33aff97cc2e2cbc8f1923f87ab35714ff80735c"
+    "commit": "0aa98303430aa3935104393e132e8078beac00e2"
   },
   "_source": "https://github.com/scenaristeur/openfisca-pension.git",
   "_target": "*",
